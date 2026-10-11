@@ -8,7 +8,7 @@ LIM HUIXIN VIVIAN
 ```
 
 Visit [Requirements Specification][spec] for specification document
-Request permissions from @smleong-ntu if not visible
+Request permissions from [smleong-ntu][profile] if not visible
 
 # GitHub Version Control
 > To keep things clean, let's keep our version control process simple
@@ -57,14 +57,16 @@ origin  https://github.com/smleong-ntu/ct2004-t3.git (push)
 
 ## Merging Branch
 > Advanced | Ignore
-**Please request for assistance from @smleong-ntu if unsure**
+
+**Please request for assistance from [smleong-ntu][profile] if unsure**
 1. Open Pull Request using GitHub web interface for your branch
 2. Wait for Review approval <!-- optional -->
 3. Click Merge then perform [Delete Branch](#deleting-branch)
 
 ## Deleting Branch
 > Advanced | Ignore | Post Merge
-** Please request for assistance from @smleong-ntu if unsure**
+
+**Please request for assistance from [smleong-ntu][profile] if unsure**
 1. git switch main
 2. git branch <!-- confirm you are on main branch -->
 3. git push origin --delete (feature-branch-name)
@@ -73,3 +75,4 @@ origin  https://github.com/smleong-ntu/ct2004-t3.git (push)
 
 [spec]: https://entuedu-my.sharepoint.com/:w:/r/personal/c260010_e_ntu_edu_sg/Documents/CT2004%20-%20Software%20Engineering/Specifications.docx?d=wd730d71b5d8048e4a4afa840136bc5c6&csf=1&web=1&e=73DPu9
 [ghconfig]: https://youtu.be/r8jQ9hVA2qs?si=aVXLdkI_udhQNqrS&t=186
+[profile]: https://github.com/smleong-ntu
