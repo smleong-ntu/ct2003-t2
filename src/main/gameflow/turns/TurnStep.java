@@ -22,4 +22,12 @@ public abstract class TurnStep {
 	}
 	
 	public void execute() {}
+	
+	protected final void postExecuteAction() {
+		if (postAction == null) {
+			return;
+		}
+		
+		postAction.run();
+	}
 }

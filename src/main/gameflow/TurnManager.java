@@ -3,7 +3,6 @@ package main.gameflow;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Supplier;
-import java.util.function.Function;
 import main.gamesetting.*;
 import main.events.*;
 import main.gameflow.turns.*;
@@ -20,6 +19,8 @@ public class TurnManager {
 	public TurnManager(GameData setting) {
 		MAX_TURN = setting.turns();
 		
+		//Use data setting to create steps in the order reflected in setting
+		//Then initialize and set post execute action
 		for (Supplier<? extends TurnStep> step : setting.stepOrder()) {
 			TurnStep newStep = step.get();
 			newStep.initialize(this);
@@ -54,6 +55,8 @@ public class TurnManager {
 		steps.get(currentStep).execute();
 	}
 	
+	//updates the step then checks if turn should be completed
+	//if not completed execute next step
 	private void nextStep() {
 		currentStep ++;
 		
@@ -66,7 +69,8 @@ public class TurnManager {
 		steps.get(currentStep).execute();
 	}
 	
-	//completes the turn
+	//completes the turn, notify all listeners
+	//determine if have any remaining turns, start a new turn if turns are available
 	private void complete() {
 		
 		notify(new OnTurn.End(currentTurn));
