@@ -54,4 +54,5 @@ public class GameData {
 	public int tables() { return tables; }
 	public List<Supplier<? extends TurnStep>> stepOrder() { return stepOrder; }
 	public Map<String, Integer> staffList() { return staffList; }
+	public Map<Integer, String> arrivals() { return arrivals; };
 }

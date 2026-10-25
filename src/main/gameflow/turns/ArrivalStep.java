@@ -1,5 +1,26 @@
 package main.gameflow.turns;
 
-public class ArrivalStep extends TurnStep {
+import main.gameflow.*;
 
+public class ArrivalStep extends TurnStep {
+	
+	@Override
+	public void initialize(TurnManager manager) {
+		super.initialize(manager);
+		
+		//save reference to restaurant
+	}
+	
+	@Override
+	public void execute() {
+		String customer = GameSession.data().arrivals().get(turn);
+		
+		if (customer != "None") {
+			System.out.printf("Customer arrival [Turn %d]", turn);
+			
+			//Push to restaurant queue
+		}
+		
+		postAction.run();
+	}
 }

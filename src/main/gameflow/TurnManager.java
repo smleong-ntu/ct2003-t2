@@ -3,6 +3,7 @@ package main.gameflow;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Supplier;
+import java.util.function.Function;
 import main.gamesetting.*;
 import main.events.*;
 import main.gameflow.turns.*;
@@ -22,6 +23,7 @@ public class TurnManager {
 		for (Supplier<? extends TurnStep> step : setting.stepOrder()) {
 			TurnStep newStep = step.get();
 			newStep.initialize(this);
+			newStep.setPostExecuteAction(this::nextStep);
 			
 			steps.add(newStep);
 		}
@@ -49,6 +51,19 @@ public class TurnManager {
 		currentTurn ++;
 		
 		notify(new OnTurn.Start(currentTurn));
+		steps.get(currentStep).execute();
+	}
+	
+	private void nextStep() {
+		currentStep ++;
+		
+		if (currentStep > steps.size() - 1) 
+		{
+			complete();
+			return;
+		}
+		
+		steps.get(currentStep).execute();
 	}
 	
 	//completes the turn
