@@ -5,8 +5,9 @@ import main.gamesetting.*;
 
 public class GameSession implements GameEventListener{
 	
+	private static GameData data;
+	
 	private GameObjective objective;
-	private GameData data;
 	private TurnManager turnManager;
 		
 	public GameSession(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
@@ -18,14 +19,18 @@ public class GameSession implements GameEventListener{
 	
 	//creation of various components
 	private void initialize(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
-		objective = new GameObjective(objectiveSetting);
-		objective.Display();
-		
 		data = new GameData(dataSetting);
-		data.Display();
+		data.display();
+		
+		objective = new GameObjective(objectiveSetting);
+		objective.display();
+		
+		//create restaurant
+		//restaurant = new Restaurant(dataSetting);
 		
 		turnManager = new TurnManager(data);
 		turnManager.subscribe(objective);
+		turnManager.subscribe(this);
 	}
 	
 	//starts different components after linking and creation
@@ -39,7 +44,7 @@ public class GameSession implements GameEventListener{
 		objective.status();
 		
 		//perform cleanup of remaining classes where needed
-		turnManager.unsubscribe(objective);
+		//turnManager.unsubscribe(objective);
 	}
 	
 	@Override
@@ -58,5 +63,5 @@ public class GameSession implements GameEventListener{
 		}
 	}
 
-	public GameData data() { return data; }
+	public static GameData data() { return data; }
 }

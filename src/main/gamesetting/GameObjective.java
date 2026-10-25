@@ -25,7 +25,7 @@ public class GameObjective implements GameEventListener {
 		satisfaction = setting.satisfaction;
 	}
 	
-	public void Display() {
+	public void display() {
 		System.out.printf("Displaying Target Objective [%s]%n", name);
 		System.out.printf("Paid Customers: %d%n", paidCustomers);
 		System.out.printf("Revenue: %d%n", revenue);

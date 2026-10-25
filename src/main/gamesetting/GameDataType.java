@@ -1,14 +1,24 @@
 package main.gamesetting;
 
+import java.util.List;
 import java.util.Map;
 import static java.util.Map.entry;
+
+import main.gameflow.turns.*;
 
 public class GameDataType {
 	public static final GameData.Setting DEFAULTS = new GameData.Setting() {{
 		name = "default setting";
 		turns = 18;
 		tables = 2;
-		stepOrder = new int[] { 1,2,3,4,5,6 };
+		
+		stepOrder = List.of(
+		    ArrivalStep::new,
+		    ManagerStep::new,
+		    TaskStep::new,
+		    DiningStep::new,
+		    EndStep::new
+		);
 		
 		staffList = Map.of(
 			"Waiter", 1,
