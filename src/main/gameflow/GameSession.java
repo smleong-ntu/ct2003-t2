@@ -6,6 +6,7 @@ import main.gamesetting.*;
 public class GameSession implements GameEventListener{
 	
 	private GameObjective objective;
+	private GameData data;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -16,11 +17,14 @@ public class GameSession implements GameEventListener{
 		
 	}
 	
-	public GameSession(GameObjective.Setting setting) {
+	public GameSession(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
 		System.out.println("New session created!");
 		
-		objective = new GameObjective(setting);
+		objective = new GameObjective(objectiveSetting);
 		objective.Display();
+		
+		data = new GameData(dataSetting);
+		data.Display();
 	}
 	
 	//TEST EVENT EVALUATION >> TO REMOVE LATER <<
