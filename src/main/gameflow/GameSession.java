@@ -20,10 +20,10 @@ public class GameSession implements GameEventListener{
 	//creation of various components
 	private void initialize(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
 		data = new GameData(dataSetting);
-		data.display();
+		//data.display();
 		
 		objective = new GameObjective(objectiveSetting);
-		objective.display();
+		//objective.display();
 		
 		//create restaurant
 		//restaurant = new Restaurant(dataSetting);
@@ -51,7 +51,7 @@ public class GameSession implements GameEventListener{
 	public void onEvent(GameEvent event) {		
 		switch (event) {
 			case OnTurn.End onTurnEnd -> {
-				System.out.printf("payload %s%n", onTurnEnd.turn());
+				System.out.printf("payload %d%n", onTurnEnd.turn());
 				if (onTurnEnd.turn() == data.turns()) {
 					endSession();
 				}

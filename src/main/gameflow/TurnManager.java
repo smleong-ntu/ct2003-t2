@@ -59,6 +59,7 @@ public class TurnManager {
 	//if not completed execute next step
 	private void nextStep() {
 		currentStep ++;
+		System.out.printf("to next step %d on turn %d%n", currentStep, currentTurn);
 		
 		if (currentStep > steps.size() - 1) 
 		{

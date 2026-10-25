@@ -1,8 +1,11 @@
 package main.gameflow.turns;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import main.gameflow.TurnManager;
+import main.staff.*;
 
 public class ManagerStep extends TurnStep {
 	
@@ -19,22 +22,85 @@ public class ManagerStep extends TurnStep {
 	
 	public void execute() {
 		
+		List<Task> tasks;
+		Task selectedTask;
+		
 		//Find Waiter choices
-		displayChoices();
-		int choice1 = selectChoice(5);
+		tasks = findTasks(0);
+		displayTasks(tasks, 0);
+
+		selectedTask = selectTask(tasks);
+		
+		if (selectedTask != null) {
+			//get the staff object then staff.setTask(selectedTask);
+			//add into "task queue"
+			System.out.printf("Adding %s to task queue%n", selectedTask.taskName());
+		}
 		
 		//Find Chef choices
-		displayChoices();
-		int choice2 = selectChoice(3);
+		tasks = findTasks(1);
+		displayTasks(tasks, 1);
 		
+		selectedTask = selectTask(tasks);
+
+		if (selectedTask != null) {
+			//get the staff object then staff.setTask(selectedTask);
+			//add into "task queue"
+			System.out.printf("Adding %s to task queue%n", selectedTask.taskName());
+		}
+		
+		postExecuteAction();
 	}
 	
-	private void displayChoices() {
-		System.out.println("[1] Placeholder selection");
+	private List<Task> findTasks(/*staff class here*/ int staffID) {
+		
+		//Get list of staff of staff class type from restaurant
+		
+		//Get task list of staff object
+		//Placeholder task list
+		List<Task> tasks = new ArrayList<>();
+		
+		switch (staffID) {
+			case 0:
+				tasks.add(new GenericTask("task1"));
+				tasks.add(new GenericTask("task2"));
+				break;
+				
+			case 1:
+				tasks.add(new GenericTask("task1"));
+				tasks.add(new GenericTask("task2"));
+				tasks.add(new GenericTask("task3"));
+				tasks.add(new GenericTask("task4"));
+				break;
+			
+			default:
+				break;
+		}
+		
+		return tasks;
+	}
+	
+	private void displayTasks(List<Task> tasks, int staffID /*staff object here*/) {
+		
+		System.out.printf("Select a task for Staff: [%d]%n", staffID);
+		
+		//Display if no choices
+		if (tasks.size() == 0) {
+			System.out.printf("Staff: [%d] has no tasks", staffID);
+			return;
+		}
+		
+		for (int i = 0; i < tasks.size(); i++) {
+			System.out.printf("[%d] %s%n", i+1, tasks.get(i).taskName());
+		}
 	}
 	
 	//Retrieves selected choice by input
-	private int selectChoice(int max) {
+	private Task selectTask(List<Task> tasks) {
+		
+		if (tasks.size() == 0) {
+			return null;
+		}
 		
 		boolean isValidChoice = false;
 		int selection;
@@ -43,24 +109,33 @@ public class ManagerStep extends TurnStep {
 			selection = -1;
 			
 			try {
-				selection = input.nextInt();			
+				selection = input.nextInt() - 1;			
 			}
 			
 			catch (InputMismatchException e){
-				System.out.printf("Mismatch input %s%n", e.getMessage());
+				System.out.printf("Mismatch input %s. Please enter an integer between 1-%d%n", e.getMessage(), tasks.size());
 				input.nextLine();
 				continue;
 			}
 			
-			if (selection != 1) {
-				System.out.println("Invalid choice. Try again");
+			catch (IndexOutOfBoundsException e) {
+				System.out.printf("Invalid integer %s. Please enter an integer between 1-%d%n", e.getMessage(), tasks.size());
+				input.nextLine();
 				continue;
 			}
+
+			//This version will check task valid every time this is called
+			StringBuilder sb = new StringBuilder();
+			isValidChoice = tasks.get(selection).isTaskValid(sb);
+					
+			System.out.printf("Selected [%d]%n", selection + 1);
 			
-			System.out.printf("Selected [%d]%n", selection);
-			isValidChoice = true;
+			if (!isValidChoice) {
+				System.out.printf("Invalid choice due to %s. Try again%n", sb.toString()); //need show reason for task invalid
+			}
+			
 		} while (!isValidChoice);
 		
-		return selection;
+		return tasks.get(selection);
 	}
 }
