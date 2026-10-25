@@ -11,4 +11,11 @@ public class OnTurn {
 		public int turn() { return turn; }
 	}
 	
+	public static class Start implements GameEvent{
+		private final int turn;
+		
+		public Start(int turn) { this.turn = turn; }
+		public int turn() { return turn; }
+	}
+	
 }
