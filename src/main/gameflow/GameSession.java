@@ -1,20 +1,26 @@
 package main.gameflow;
 
 import main.events.*;
+import main.gamesetting.*;
 
 public class GameSession implements GameEventListener{
-
+	
+	private GameObjective objective;
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		GameSession session = new GameSession();
+		//GameSession session = new GameSession();
 		
 		//TEST EVENT RECEIVED
 		//session.onEvent(new OnTurn.End(599));
 		
 	}
 	
-	public GameSession() {
+	public GameSession(GameObjective.Setting setting) {
 		System.out.println("New session created!");
+		
+		objective = new GameObjective(setting);
+		objective.Display();
 	}
 	
 	//TEST EVENT EVALUATION >> TO REMOVE LATER <<
