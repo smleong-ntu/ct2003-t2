@@ -102,6 +102,9 @@ public class ManagerStep extends TurnStep {
 			return null;
 		}
 		
+		//builds a reason should the task be invalid
+		StringBuilder reason = new StringBuilder();
+		
 		boolean isValidChoice = false;
 		int selection;
 		
@@ -110,6 +113,9 @@ public class ManagerStep extends TurnStep {
 			
 			try {
 				selection = input.nextInt() - 1;			
+				
+				//This version will check task valid every time this is called
+				isValidChoice = tasks.get(selection).isTaskValid(reason);
 			}
 			
 			catch (InputMismatchException e){
@@ -118,20 +124,17 @@ public class ManagerStep extends TurnStep {
 				continue;
 			}
 			
+			//For some reason this is still not triggering, i think is due to the error only being below
 			catch (IndexOutOfBoundsException e) {
 				System.out.printf("Invalid integer %s. Please enter an integer between 1-%d%n", e.getMessage(), tasks.size());
 				input.nextLine();
 				continue;
 			}
-
-			//This version will check task valid every time this is called
-			StringBuilder sb = new StringBuilder();
-			isValidChoice = tasks.get(selection).isTaskValid(sb);
-					
+	
 			System.out.printf("Selected [%d]%n", selection + 1);
 			
 			if (!isValidChoice) {
-				System.out.printf("Invalid choice due to %s. Try again%n", sb.toString()); //need show reason for task invalid
+				System.out.printf("Invalid choice due to %s. Try again%n", reason.toString()); //need show reason for task invalid
 			}
 			
 		} while (!isValidChoice);

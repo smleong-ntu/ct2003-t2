@@ -10,7 +10,7 @@ import main.gameflow.turns.*;
 public class TurnManager {
 	
 	private final int MAX_TURN;
-	private int currentTurn = 1;
+	private int currentTurn = 0;
 	private int currentStep = 0;
 	
 	private List<TurnStep> steps = new ArrayList<>();
@@ -52,6 +52,9 @@ public class TurnManager {
 		currentTurn ++;
 		
 		notify(new OnTurn.Start(currentTurn));
+		
+		//Update turns for all steps, then execute current step
+		steps.forEach(step -> step.setTurn(currentTurn));
 		steps.get(currentStep).execute();
 	}
 	
