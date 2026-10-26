@@ -10,8 +10,8 @@ import main.gameflow.turns.*;
 public class TurnManager {
 	
 	private final int MAX_TURN;
-	private int currentTurn = 0;
-	private int currentStep = 0;
+	private int currentTurn = 1;
+	private int currentStep = -1;
 	
 	private List<TurnStep> steps = new ArrayList<>();
 	private List<GameEventListener> listeners = new ArrayList<GameEventListener>();
@@ -47,16 +47,12 @@ public class TurnManager {
 	//TURN METHODS INTERNAL
 	//starts a fresh turn
 	private void start() {
-		
-		currentStep = 0;
-		currentTurn ++;
-		
+		System.out.printf("TURN [%d/%d]%n", currentTurn, MAX_TURN);
 		notify(new OnTurn.Start(currentTurn));
-		System.out.printf("Turn [%d] -> [%d:%s]%n", currentTurn, currentStep + 1, steps.get(currentStep).getName());
 		
-		//Update turns for all steps, then execute current step
+		//Update turns for all steps, then execute nextStep (-1 -> 0)
 		steps.forEach(step -> step.setTurn(currentTurn));
-		steps.get(currentStep).execute();
+		nextStep(); //turns currentStep to 0
 	}
 	
 	//updates the step then checks if turn should be completed
@@ -66,11 +62,12 @@ public class TurnManager {
 		
 		if (currentStep > steps.size() - 1) 
 		{
+			notify(new OnTurn.End(currentTurn));
 			complete();
 			return;
 		}
 		
-		System.out.printf("Turn [%d] -> [%d:%s]%n", currentTurn, currentStep + 1, steps.get(currentStep).getName());
+		System.out.printf("[%d: %s]%n", currentStep + 1, steps.get(currentStep).getName());
 		steps.get(currentStep).execute();
 	}
 	
@@ -78,12 +75,22 @@ public class TurnManager {
 	//determine if have any remaining turns, start a new turn if turns are available
 	private void complete() {
 		
-		notify(new OnTurn.End(currentTurn));
+		notify(new OnTurn.Completed(currentTurn));
 		
 		if (currentTurn < MAX_TURN) {
+			
 			//Go next turn
-			start();
+			nextTurn();
 		}
+	}
+	
+	//Reset to -1 for step and increment turn. then call start to loop
+	private void nextTurn() {
+		currentStep = -1;
+		currentTurn ++;
+		
+		notify(new OnTurn.Reset(currentTurn));
+		start();
 	}
 	
 	private void notify(GameEvent event) {

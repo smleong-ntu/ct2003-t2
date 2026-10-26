@@ -32,7 +32,7 @@ public class TaskManager implements GameEventListener {
 	@Override
 	public void onEvent(GameEvent event) {
 		switch (event) {
-			case OnTurn.Start onTurnStart -> { completedTasks.clear(); System.out.printf("Reset completed task for turn %d%n", onTurnStart.turn()); }
+			case OnTurn.Reset onTurnReset -> { completedTasks.clear(); System.out.printf("Reset completed task for turn %d%n", onTurnReset.turn()); }
 			case OnTurn.End onTurnEnd -> { System.out.printf("Completed tasks for turn %d%n", onTurnEnd.turn()); displayCompletedTasks(); }
 			default -> {}
 		}
