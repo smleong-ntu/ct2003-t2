@@ -25,7 +25,7 @@ public class TaskManager implements GameEventListener {
 	
 	private void displayCompletedTasks() {
 		completedTasks.forEach(task -> {
-			System.out.printf("Task: %s", task.name);
+			System.out.printf("Task: %s%n", task.name);
 		});
 	}
 	
@@ -37,4 +37,6 @@ public class TaskManager implements GameEventListener {
 			default -> {}
 		}
 	}
+	
+	public int numQueued() { return queuedTasks.size(); }
 }
