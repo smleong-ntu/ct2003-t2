@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.InputMismatchException;
-import java.util.function.Supplier;
 
 import main.gameflow.GameSession;
 import main.gameflow.TurnManager;
