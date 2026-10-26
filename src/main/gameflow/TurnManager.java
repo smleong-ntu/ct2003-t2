@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import main.gamesetting.*;
 import main.events.*;
 import main.gameflow.turns.*;
+import main.staff.*;
 
 public class TurnManager {
 	
@@ -15,6 +16,9 @@ public class TurnManager {
 	
 	private List<TurnStep> steps = new ArrayList<>();
 	private List<GameEventListener> listeners = new ArrayList<GameEventListener>();
+	
+	//Placeholder
+	private TaskManager placeholderTaskManager;
 	
 	public TurnManager(GameData setting) {
 		MAX_TURN = setting.turns();
@@ -28,6 +32,8 @@ public class TurnManager {
 			
 			steps.add(newStep);
 		}
+		
+		placeholderTaskManager = new TaskManager();
 	}
 	
 	//specific call to start turns
@@ -90,4 +96,6 @@ public class TurnManager {
 			listener.onEvent(event);
 		}
 	}
+	
+	public TaskManager placeholderTaskManager() { return placeholderTaskManager; }
 }
