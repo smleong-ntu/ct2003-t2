@@ -12,7 +12,7 @@ public class GameSession implements GameEventListener{
 	
 	private GameObjective objective;
 	private TurnManager turnManager;
-	private TurnInfoTracker infoTracker;
+	private TurnEndView infoTracker;
 	private TurnView turnStartView;
 	
 	//Placeholder
@@ -39,7 +39,7 @@ public class GameSession implements GameEventListener{
 	private void initialize(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
 		data = new GameData(dataSetting);		
 		objective = new GameObjective(objectiveSetting);
-		infoTracker = new TurnInfoTracker();
+		infoTracker = new TurnEndView();
 		turnStartView = new TurnStartView();
 		
 		//create restaurant

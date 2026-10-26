@@ -5,15 +5,12 @@ import main.gameflow.GameSession;
 
 //tracks cumulative turn information
 //updates self information based on events rather than polling
-public class TurnInfoTracker implements GameEventListener {
+public class TurnEndView extends TurnView {
 	
-	private int turn;
 	private int served;
 	private int unhappyDepartures;
-	private int revenue;
-	private int satisfaction;
 		
-	private void displayInfo() {
+	protected void display() {
 		System.out.printf("TURN [%d/%d] SUMMARY%n", turn, GameSession.data().turns());
 		System.out.printf("Total Served: %d%n", served);
 		System.out.printf("Unhappy Departures: %n", unhappyDepartures);
@@ -24,7 +21,7 @@ public class TurnInfoTracker implements GameEventListener {
 	public void onEvent (GameEvent event) {
 		switch (event) {
 			case OnTurn.Start onTurnStart -> {turn = onTurnStart.turn();}
-			case OnTurn.Completed onTurnCompleted -> { displayInfo(); }
+			case OnTurn.Completed onTurnCompleted -> { display(); }
 			default -> {}
 		}
 	}
