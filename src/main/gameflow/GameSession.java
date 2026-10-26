@@ -68,8 +68,8 @@ public class GameSession implements GameEventListener{
 	@Override
 	public void onEvent(GameEvent event) {		
 		switch (event) {
-			case OnTurn.End onTurnEnd -> {
-				if (onTurnEnd.turn() == data.turns()) {
+			case OnTurn.Completed onTurnCompleted -> {
+				if (onTurnCompleted.turn() == data.turns()) {
 					endSession();
 				}
 			}
