@@ -13,8 +13,8 @@ public class TurnInfoTracker implements GameEventListener {
 	private int revenue;
 	private int satisfaction;
 		
-	public void displayInfo() {
-		System.out.printf("TURN [%d/%d] SUMMARY", turn, GameSession.data().turns());
+	private void displayInfo() {
+		System.out.printf("TURN [%d/%d] SUMMARY%n", turn, GameSession.data().turns());
 		System.out.printf("Total Served: %d%n", served);
 		System.out.printf("Unhappy Departures: %n", unhappyDepartures);
 		System.out.printf("Revenue: %d%n", revenue);
@@ -23,7 +23,8 @@ public class TurnInfoTracker implements GameEventListener {
 	
 	public void onEvent (GameEvent event) {
 		switch (event) {
-			case OnTurn.Start onTurnStart -> {turn = onTurnStart.turn(); displayInfo();}
+			case OnTurn.Start onTurnStart -> {turn = onTurnStart.turn();}
+			case OnTurn.Completed onTurnCompleted -> { displayInfo(); }
 			default -> {}
 		}
 	}

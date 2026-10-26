@@ -3,14 +3,16 @@ package main.gameflow;
 import main.events.*;
 import main.gamesetting.*;
 import main.staff.TaskManager;
+import main.gameflow.turns.TurnInfoTracker;
 
 public class GameSession implements GameEventListener{
 	
-	private static GameData data;
 	private static GameSession session;
+	private static GameData data;
 	
 	private GameObjective objective;
 	private TurnManager turnManager;
+	private TurnInfoTracker infoTracker;
 	
 	//Placeholder
 	private TaskManager placeholderTaskManager;
@@ -34,20 +36,20 @@ public class GameSession implements GameEventListener{
 	
 	//creation of various components
 	private void initialize(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
-		data = new GameData(dataSetting);
-		//data.display();
-		
+		data = new GameData(dataSetting);		
 		objective = new GameObjective(objectiveSetting);
-		//objective.display();
+		infoTracker = new TurnInfoTracker();
 		
 		//create restaurant
 		//restaurant = new Restaurant(dataSetting);
+		//restaurant.subscribe(infoTracker);
 		placeholderTaskManager = new TaskManager();
 				
 		
 		turnManager = new TurnManager(data);
 		turnManager.subscribe(objective);
 		turnManager.subscribe(placeholderTaskManager);
+		turnManager.subscribe(infoTracker);
 		turnManager.subscribe(this);
 	}
 	
