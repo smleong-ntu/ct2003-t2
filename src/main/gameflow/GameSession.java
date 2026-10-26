@@ -15,12 +15,21 @@ public class GameSession implements GameEventListener{
 	//Placeholder
 	private TaskManager placeholderTaskManager;
 		
-	public GameSession(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
+	private GameSession(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
 		System.out.println("New session created!");
 		
 		session = this;
 		initialize(dataSetting, objectiveSetting);
 		startSession();
+	}
+	
+	public static GameSession Create (GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
+		
+		if (session == null) {
+			session = new GameSession(dataSetting, objectiveSetting);
+		}
+		
+		return session;
 	}
 	
 	//creation of various components
