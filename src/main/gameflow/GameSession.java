@@ -2,17 +2,23 @@ package main.gameflow;
 
 import main.events.*;
 import main.gamesetting.*;
+import main.staff.TaskManager;
 
 public class GameSession implements GameEventListener{
 	
 	private static GameData data;
+	private static GameSession session;
 	
 	private GameObjective objective;
 	private TurnManager turnManager;
+	
+	//Placeholder
+	private TaskManager placeholderTaskManager;
 		
 	public GameSession(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
 		System.out.println("New session created!");
 		
+		session = this;
 		initialize(dataSetting, objectiveSetting);
 		startSession();
 	}
@@ -27,9 +33,12 @@ public class GameSession implements GameEventListener{
 		
 		//create restaurant
 		//restaurant = new Restaurant(dataSetting);
+		placeholderTaskManager = new TaskManager();
+				
 		
 		turnManager = new TurnManager(data);
 		turnManager.subscribe(objective);
+		turnManager.subscribe(placeholderTaskManager);
 		turnManager.subscribe(this);
 	}
 	
@@ -51,7 +60,6 @@ public class GameSession implements GameEventListener{
 	public void onEvent(GameEvent event) {		
 		switch (event) {
 			case OnTurn.End onTurnEnd -> {
-				System.out.printf("payload %d%n", onTurnEnd.turn());
 				if (onTurnEnd.turn() == data.turns()) {
 					endSession();
 				}
@@ -64,4 +72,7 @@ public class GameSession implements GameEventListener{
 	}
 
 	public static GameData data() { return data; }
+	public static GameSession session() { return session; }
+	
+	public TaskManager placeholderTaskManager() { return placeholderTaskManager; }
 }

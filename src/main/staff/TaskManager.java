@@ -10,6 +10,7 @@ public class TaskManager implements GameEventListener {
 	
 	public void queue(Task t) {
 		queuedTasks.add(t);
+		System.out.printf("Adding %s to task queue%n", t.taskName());
 	}
 	
 	public Task dequeue() {

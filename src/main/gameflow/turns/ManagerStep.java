@@ -57,9 +57,7 @@ public class ManagerStep extends TurnStep {
 		Task selectedTask = selectTask(tasks);
 		
 		if (selectedTask != null) {
-			//get the staff object then staff.setTask(selectedTask);
-			//add into "task queue"
-			System.out.printf("Adding %s to task queue%n", selectedTask.taskName());
+			GameSession.session().placeholderTaskManager().queue(selectedTask);
 		}
 	}
 	
