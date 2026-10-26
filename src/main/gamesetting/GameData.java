@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.function.Supplier;
 import main.gameflow.turns.*;
+import main.staff.*;
 
 public class GameData {
 	public static class Setting{
@@ -13,7 +14,7 @@ public class GameData {
 		public int turns;
 		public int tables;
 		public List<Supplier<? extends TurnStep>> stepOrder;
-		public Map<String, Integer> staffList;
+		public Map<Supplier<? extends Staff>, Integer> staffList;
 		public Map<Integer,String> arrivals;
 	}
 	
@@ -21,7 +22,7 @@ public class GameData {
 	private final int turns;
 	private final int tables;
 	private final List<Supplier<? extends TurnStep>> stepOrder;
-	private final Map<String, Integer> staffList;
+	private final Map<Supplier<? extends Staff>, Integer> staffList;
 	private final Map<Integer, String> arrivals;
 	
 	public GameData(Setting setting) {
@@ -38,9 +39,9 @@ public class GameData {
 		System.out.printf("Turns: %d%n", turns);
 		System.out.printf("Tables: %d%n", tables);
 				
-		staffList.forEach((key, value) -> {
-			System.out.printf("Staff List: %s - %d%n", key, value);	
-		});
+//		staffList.forEach((key, value) -> {
+//			System.out.printf("Staff List: %s - %d%n", key, value);	
+//		});
 		
 		arrivals.forEach((key, value) -> {
 			System.out.printf("Arrival List: %d - %s%n", key, value);					
@@ -53,6 +54,6 @@ public class GameData {
 	public int turns() { return turns; }
 	public int tables() { return tables; }
 	public List<Supplier<? extends TurnStep>> stepOrder() { return stepOrder; }
-	public Map<String, Integer> staffList() { return staffList; }
+	public Map<Supplier<? extends Staff>, Integer> staffList() { return staffList; }
 	public Map<Integer, String> arrivals() { return arrivals; };
 }

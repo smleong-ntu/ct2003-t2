@@ -2,8 +2,13 @@ package main.gameflow.turns;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.util.function.Supplier;
+
+import main.gameflow.GameSession;
 import main.gameflow.TurnManager;
 import main.staff.*;
 
@@ -11,82 +16,85 @@ public class ManagerStep extends TurnStep {
 	
 	private Scanner input;
 	
+	//placeholder staff list, this should come from restaurant
+	Map<Class<? extends Staff>, List<Staff>> placeholderStaffList = new HashMap<>();
+	
 	@Override
 	public void initialize(TurnManager manager) {
 		super.initialize(manager);
 		
 		input = new Scanner(System.in);
+
+		//Placeholder initialization of staff list, can be brought over to restaurant
+		GameSession.data().staffList().forEach((key, value) -> {
+			
+			for (int i = 0; i < value; i++) {
+				Staff newStaff = key.get();
+				placeholderStaffList.computeIfAbsent(newStaff.getClass(), _ -> new ArrayList<>()).add(newStaff);
+			}
+		});
 		
 		//save reference to restaurant or staff list <- since it is non dynamic
 	}
 	
 	public void execute() {
+				
+		//Get list of staff of staff class type from restaurant
+		//Queue task for waiters
+		List<Staff> waiters = placeholderStaffList.get(Waiter.class);
+		waiters.forEach(this::queueTask);
 		
-		List<Task> tasks;
-		Task selectedTask;
-		
-		//Find Waiter choices
-		tasks = findTasks(0);
-		displayTasks(tasks, 0);
-
-		selectedTask = selectTask(tasks);
-		
-		if (selectedTask != null) {
-			//get the staff object then staff.setTask(selectedTask);
-			//add into "task queue"
-			System.out.printf("Adding %s to task queue%n", selectedTask.taskName());
-		}
-		
-		//Find Chef choices
-		tasks = findTasks(1);
-		displayTasks(tasks, 1);
-		
-		selectedTask = selectTask(tasks);
-
-		if (selectedTask != null) {
-			//get the staff object then staff.setTask(selectedTask);
-			//add into "task queue"
-			System.out.printf("Adding %s to task queue%n", selectedTask.taskName());
-		}
-		
+		//Queue task for chefs
+		List<Staff> chefs = placeholderStaffList.get(Chef.class);
+		chefs.forEach(this::queueTask);
+				
 		postExecuteAction();
 	}
 	
-	private List<Task> findTasks(/*staff class here*/ int staffID) {
+	private void queueTask(Staff s) {
+		List<Task> tasks = findTasks(s);
+		displayTasks(tasks, s);
 		
-		//Get list of staff of staff class type from restaurant
+		Task selectedTask = selectTask(tasks);
+		
+		if (selectedTask != null) {
+			//get the staff object then staff.setTask(selectedTask);
+			//add into "task queue"
+			System.out.printf("Adding %s to task queue%n", selectedTask.taskName());
+		}
+	}
+	
+	private List<Task> findTasks(Staff s) {
 		
 		//Get task list of staff object
-		//Placeholder task list
+		//Placeholder task list, should be directly defined in staff
 		List<Task> tasks = new ArrayList<>();
 		
-		switch (staffID) {
-			case 0:
-				tasks.add(new GenericTask("task1"));
-				tasks.add(new GenericTask("task2"));
-				break;
-				
-			case 1:
-				tasks.add(new GenericTask("task1"));
-				tasks.add(new GenericTask("task2"));
-				tasks.add(new GenericTask("task3"));
-				tasks.add(new GenericTask("task4"));
-				break;
+		if (s instanceof Waiter) {
 			
-			default:
-				break;
+			tasks.add(new GenericTask("task1"));
+			tasks.add(new GenericTask("task2"));
+			return tasks;
 		}
 		
+		if (s instanceof Chef) {
+			tasks.add(new GenericTask("task1"));
+			tasks.add(new GenericTask("task2"));
+			tasks.add(new GenericTask("task3"));
+			tasks.add(new GenericTask("task4"));
+			return tasks;
+		}
+
 		return tasks;
 	}
 	
-	private void displayTasks(List<Task> tasks, int staffID /*staff object here*/) {
+	private void displayTasks(List<Task> tasks, Staff s) {
 		
-		System.out.printf("Select a task for Staff: [%d]%n", staffID);
+		System.out.printf("Select a task for Staff: [%s]%n", s.getClass().getSimpleName());
 		
 		//Display if no choices
 		if (tasks.size() == 0) {
-			System.out.printf("Staff: [%d] has no tasks", staffID);
+			System.out.printf("Staff: [%s] has no tasks", s.getClass().getSimpleName());
 			return;
 		}
 		

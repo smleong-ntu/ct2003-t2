@@ -5,6 +5,7 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 import main.gameflow.turns.*;
+import main.staff.*;
 
 public class GameDataType {
 	public static final GameData.Setting DEFAULTS = new GameData.Setting() {{
@@ -21,9 +22,9 @@ public class GameDataType {
 		);
 		
 		staffList = Map.of(
-			"Waiter", 1,
-			"Chef", 1,
-			"Cashier", 1
+			Waiter::new, 1,
+			Chef::new, 1
+			//Cashier::new, 1
 		);
 		
 		arrivals = Map.ofEntries(
