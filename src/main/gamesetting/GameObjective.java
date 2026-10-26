@@ -1,6 +1,7 @@
 package main.gamesetting;
 
 import main.events.*;
+import main.gameflow.GameSession;
 
 public class GameObjective implements GameEventListener {
 	
@@ -35,16 +36,17 @@ public class GameObjective implements GameEventListener {
 	
 	public void status() {
 		System.out.printf("Objective [%s] completion status %b%n", name, isCompleted);
+		System.out.printf("Total paid customers: %d/%d%n", paidCustomers, paidCustomers);
+		System.out.printf("Total revenue: %d/%d%n", revenue, revenue);
+		System.out.printf("Average satisfaction: %d/%d%n", satisfaction, satisfaction);
 	}
 	
 	@Override
 	public void onEvent(GameEvent event) {
 		switch (event) {
-			case OnTurn.End onTurnEnd -> {
-				System.out.printf("payload %s%n", onTurnEnd.turn());
-				
+			case OnTurn.End onTurnEnd -> {				
 				//should be checking if it can be completed by referencing restaurant, it could be listening to restaurant instead probably
-				if (onTurnEnd.turn() == 999) {
+				if (onTurnEnd.turn() == GameSession.data().turns()) {
 					isCompleted = true;
 				}
 			}

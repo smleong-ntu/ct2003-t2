@@ -74,9 +74,7 @@ public class GameSession implements GameEventListener{
 				}
 			}
 			
-			default -> {
-				//System.out.println("payload none: generic event");
-			}
+			default -> {}
 		}
 	}
 
