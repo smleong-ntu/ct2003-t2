@@ -7,6 +7,7 @@ public class ArrivalStep extends TurnStep {
 	@Override
 	public void initialize(TurnManager manager) {
 		super.initialize(manager);
+		name = "Arrivals";
 		
 		//save reference to restaurant
 	}

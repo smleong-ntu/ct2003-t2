@@ -52,7 +52,7 @@ public class TurnManager {
 		currentTurn ++;
 		
 		notify(new OnTurn.Start(currentTurn));
-		System.out.printf("Turn [%d] -> Step [%d]%n", currentTurn, currentStep + 1);
+		System.out.printf("Turn [%d] -> [%d:%s]%n", currentTurn, currentStep + 1, steps.get(currentStep).getName());
 		
 		//Update turns for all steps, then execute current step
 		steps.forEach(step -> step.setTurn(currentTurn));
@@ -63,7 +63,6 @@ public class TurnManager {
 	//if not completed execute next step
 	private void nextStep() {
 		currentStep ++;
-		System.out.printf("Turn [%d] -> Step [%d]%n", currentTurn, currentStep + 1);
 		
 		if (currentStep > steps.size() - 1) 
 		{
@@ -71,6 +70,7 @@ public class TurnManager {
 			return;
 		}
 		
+		System.out.printf("Turn [%d] -> [%d:%s]%n", currentTurn, currentStep + 1, steps.get(currentStep).getName());
 		steps.get(currentStep).execute();
 	}
 	

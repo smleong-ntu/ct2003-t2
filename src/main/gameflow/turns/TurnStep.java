@@ -7,6 +7,7 @@ public abstract class TurnStep {
 	protected int turn;
 	protected TurnManager manager;
 	protected Runnable postAction;
+	protected String name;
 	
 	public void initialize(TurnManager manager) {
 		this.manager = manager;
@@ -30,4 +31,6 @@ public abstract class TurnStep {
 		
 		postAction.run();
 	}
+	
+	public String getName() { return name; }
 }

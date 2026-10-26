@@ -22,6 +22,7 @@ public class ManagerStep extends TurnStep {
 	public void initialize(TurnManager manager) {
 		super.initialize(manager);
 		
+		name = "Manager Selection";
 		input = new Scanner(System.in);
 
 		//Placeholder initialization of staff list, can be brought over to restaurant
