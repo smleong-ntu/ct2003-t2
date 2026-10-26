@@ -3,7 +3,7 @@ package main.gameflow;
 import main.events.*;
 import main.gamesetting.*;
 import main.staff.TaskManager;
-import main.gameflow.turns.TurnInfoTracker;
+import main.gameflow.turns.*;
 
 public class GameSession implements GameEventListener{
 	
@@ -13,6 +13,7 @@ public class GameSession implements GameEventListener{
 	private GameObjective objective;
 	private TurnManager turnManager;
 	private TurnInfoTracker infoTracker;
+	private TurnView turnStartView;
 	
 	//Placeholder
 	private TaskManager placeholderTaskManager;
@@ -39,10 +40,12 @@ public class GameSession implements GameEventListener{
 		data = new GameData(dataSetting);		
 		objective = new GameObjective(objectiveSetting);
 		infoTracker = new TurnInfoTracker();
+		turnStartView = new TurnStartView();
 		
 		//create restaurant
 		//restaurant = new Restaurant(dataSetting);
 		//restaurant.subscribe(infoTracker);
+		//restaurant.subscribe(turnStartView);
 		placeholderTaskManager = new TaskManager();
 				
 		
@@ -50,6 +53,7 @@ public class GameSession implements GameEventListener{
 		turnManager.subscribe(objective);
 		turnManager.subscribe(placeholderTaskManager);
 		turnManager.subscribe(infoTracker);
+		turnManager.subscribe(turnStartView);
 		turnManager.subscribe(this);
 	}
 	

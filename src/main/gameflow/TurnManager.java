@@ -47,7 +47,7 @@ public class TurnManager {
 	//TURN METHODS INTERNAL
 	//starts a fresh turn
 	private void start() {
-		System.out.printf("TURN [%d/%d]%n", currentTurn, MAX_TURN);
+		//System.out.printf("TURN [%d/%d]%n", currentTurn, MAX_TURN);
 		notify(new OnTurn.Start(currentTurn));
 		
 		//Update turns for all steps, then execute nextStep (-1 -> 0)
