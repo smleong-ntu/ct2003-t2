@@ -27,11 +27,13 @@ public class ArrivalStep extends TurnStep {
 			System.out.printf("No customer [Turn %d]%n", turn);
 		}
 		
-		System.out.printf("Customer arrival [Turn %d]%n", turn);
-		
-		//Push to restaurant queue
-		restaurant.addArrival(customer);
-		
+		else {
+			System.out.printf("Customer arrival [Turn %d]%n", turn);
+			
+			//Push to restaurant queue
+			restaurant.addArrival(customer);
+		}
+
 		postExecuteAction();
 	}
 }
