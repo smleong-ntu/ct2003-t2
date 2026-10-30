@@ -9,7 +9,9 @@ public abstract class Task {
 		this.name = name;
 	}
 	
-	public void execute() {}
+	public void execute() {
+		System.out.printf("Executing %s: %s%n", this.getClass().getSimpleName(), name);
+	}
 	public boolean isTaskValid(StringBuilder reason) { return true; }
 	public String taskName() { return name; }
 }
