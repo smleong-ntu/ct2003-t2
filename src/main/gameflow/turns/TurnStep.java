@@ -11,7 +11,7 @@ public abstract class TurnStep {
 	
 	public void initialize(TurnManager manager) {
 		this.manager = manager;
-		System.out.printf("Step initialized: %s%n", this.getClass().getSimpleName());
+		//System.out.printf("Step initialized: %s%n", this.getClass().getSimpleName());
 	}
 	
 	public final void setTurn(int turn) {
