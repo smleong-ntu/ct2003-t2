@@ -28,7 +28,7 @@ import java.util.OptionalDouble;
  * Each method here keeps the restaurant consistent, so callers cannot, for example,
  * add revenue without recording a payment, or leave a departed customer at a table.
  */
-public class Restaurant implements GameSubject, GameEventListener{
+public class Restaurant implements GameSubject{
 
     private final List<Table> tables;
     private final WaitingQueue waitingQueue;
@@ -399,8 +399,6 @@ public class Restaurant implements GameSubject, GameEventListener{
     public Map<Class<? extends Staff>, List<Staff>> getStaffList(){
     	return staffList;
     }
-    
- // ------------------------------------------------------------------ game events
     /*
      * GameSubject interface to record and notify listeners
      */
@@ -415,13 +413,6 @@ public class Restaurant implements GameSubject, GameEventListener{
     private void broadcast(GameEvent e) {
     	for (GameEventListener listener : listeners) {
     		listener.onEvent(e);
-    	}
-    }
-    
-    public void onEvent(GameEvent event) {
-    	switch (event) {
-	    	case OnTurn.Start onTurnStart -> {}
-	    	default -> {}
     	}
     }
 }
