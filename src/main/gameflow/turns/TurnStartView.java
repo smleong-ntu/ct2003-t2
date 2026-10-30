@@ -3,6 +3,8 @@ package main.gameflow.turns;
 import java.util.List;
 import java.util.ArrayList;
 import main.events.*;
+//import main.restaurant.*;
+import main.customer.*;
 import main.gameflow.GameSession;
 
 //tracks cumulative turn information
@@ -10,7 +12,8 @@ import main.gameflow.GameSession;
 public class TurnStartView extends TurnView {
 	
 	//can retrieve all customers and their order status here
-	private List<Integer> queue = new ArrayList<>(List.of(19, 27, 80, 24));
+	private List<Customer> queue = new ArrayList<>();
+	//private List<Integer> queue = new ArrayList<>(List.of(19, 27, 80, 24));
 	private List<Integer> tables = new ArrayList<>(List.of(0, 1));
 	
 	//Staff tasks???
@@ -29,7 +32,11 @@ public class TurnStartView extends TurnView {
 	}
 	
 	private void displayQueue() {
-		System.out.printf("Queue: %s%n", queue.toString());
+		System.out.printf("Queue: ");		
+		queue.forEach(customer -> {
+			System.out.printf("[%s %d] ", customer.getClass().getSimpleName(), customer.getCustomerId());		
+		});
+		System.out.println("");		
 	}
 	
 	private void displayOccupiedTables() {
@@ -61,6 +68,11 @@ public class TurnStartView extends TurnView {
 		
 		switch (event) {
 			case OnTurn.Start onTurnStart -> { turn = onTurnStart.turn(); display(); }
+			case OnRestaurant.QueueUpdated onQueueUpdated -> {
+				//Ensures snapshot copy instead
+				queue = List.copyOf(onQueueUpdated.waitingQueue().getCustomers());
+				displayQueue();
+			}
 			default -> {}
 		}
 	}

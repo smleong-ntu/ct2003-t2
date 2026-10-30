@@ -14,7 +14,10 @@ import java.util.List;
 public class WaitingQueue {
 
     private final List<Customer> customers = new ArrayList<>();
-
+    
+    private Runnable queueAdd;
+    private Runnable queueRemove;
+    
     /**
      * Adds a customer at the back of the queue.
      *
@@ -29,6 +32,8 @@ public class WaitingQueue {
             throw new IllegalStateException("Customer is already in the waiting queue");
         }
         customers.add(c);
+        
+        run(queueAdd);
     }
 
     /** Removes the customer and returns true, or returns false if they were not queued. */
@@ -36,6 +41,8 @@ public class WaitingQueue {
         for (int i = 0; i < customers.size(); i++) {
             if (customers.get(i) == c) {
                 customers.remove(i);
+                
+                run(queueRemove);
                 return true;
             }
         }
@@ -50,7 +57,18 @@ public class WaitingQueue {
         }
         return false;
     }
-
+    
+    /*Bindable functions to capture changes*/
+    public void onQueueAdd(Runnable onAdd) { queueAdd = onAdd; }
+    public void onQueueRemove(Runnable onRemove) { queueRemove = onRemove; }
+    
+    /*Helper functions to ensure valid binds*/
+    private void run(Runnable r) {
+    	if (r != null) {
+    		r.run();
+    	}
+    }
+    
     /** Read-only view, oldest first. */
     public List<Customer> getCustomers() {
         return Collections.unmodifiableList(customers);

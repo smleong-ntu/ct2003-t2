@@ -50,8 +50,8 @@ public class GameSession implements GameEventListener{
 		
 		//create restaurant
 		restaurant = new Restaurant(data);
-		//restaurant.subscribe(infoTracker);
-		//restaurant.subscribe(turnStartView);
+		restaurant.subscribe(infoTracker);
+		restaurant.subscribe(turnStartView);
 		placeholderTaskManager = new TaskManager();
 				
 		
@@ -85,7 +85,7 @@ public class GameSession implements GameEventListener{
 					endSession();
 				}
 			}
-			
+	
 			default -> {}
 		}
 	}

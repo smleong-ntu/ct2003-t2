@@ -7,6 +7,7 @@ import main.menu.MenuItem;
 import main.order.Order;
 import main.order.OrderStatus;
 import main.gamesetting.*;
+import main.events.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +24,7 @@ import java.util.OptionalDouble;
  * Each method here keeps the restaurant consistent, so callers cannot, for example,
  * add revenue without recording a payment, or leave a departed customer at a table.
  */
-public class Restaurant {
+public class Restaurant implements GameSubject{
 
     private final List<Table> tables;
     private final WaitingQueue waitingQueue;
@@ -32,6 +33,11 @@ public class Restaurant {
     private final List<Customer> customers = new ArrayList<>();   // every arrival, in arrival order
     private final List<Integer> paidSatisfactions = new ArrayList<>();   // recorded at payment time
     private int revenueCents;
+    
+    /*
+     * Listeners for GameSubject
+     */
+    private List<GameEventListener> listeners = new ArrayList<>();
 
     /** Creates a restaurant with the given number of tables, an empty queue, the base menu and $0. */
     public Restaurant(int tableCount) {
@@ -54,6 +60,10 @@ public class Restaurant {
      */
     public Restaurant(GameData data) {
     	this(data.tables());
+    	
+    	//binds functions to send waiting queue to listeners when it changes
+    	waitingQueue.onQueueAdd(()->broadcast(new OnRestaurant.QueueUpdated(waitingQueue)));
+    	waitingQueue.onQueueRemove(()->broadcast(new OnRestaurant.QueueUpdated(waitingQueue)));
     }
 
     // ------------------------------------------------------------------ arrivals
@@ -351,5 +361,22 @@ public class Restaurant {
         if (t == null || !tables.contains(t)) {
             throw new IllegalArgumentException("That table does not belong to this restaurant");
         }
+    }
+    
+    /*
+     * GameSubject interface to record and notify listeners
+     */
+    public void subscribe(GameEventListener listener) {
+    	listeners.add(listener);
+    }
+    
+    public void unsubscribe(GameEventListener listener) {
+    	listeners.remove(listener);
+    }
+    
+    private void broadcast(GameEvent e) {
+    	for (GameEventListener listener : listeners) {
+    		listener.onEvent(e);
+    	}
     }
 }
