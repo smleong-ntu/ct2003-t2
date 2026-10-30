@@ -2,8 +2,8 @@ package main.gameflow.turns;
 
 import main.gameflow.GameSession;
 import main.gameflow.TurnManager;
-import main.staff.Task;
-import main.staff.TaskManager;
+import main.staff.task.Task;
+import main.staff.task.TaskManager;
 
 public class TaskStep extends TurnStep{
 	

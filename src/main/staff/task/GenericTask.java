@@ -1,4 +1,4 @@
-package main.staff;
+package main.staff.task;
 
 //THIS IS A PLACEHOLDER CLASS TO TEST TASK IMPLEMENTATIONS
 public class GenericTask extends Task{

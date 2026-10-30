@@ -4,7 +4,7 @@ import main.events.*;
 import main.gameflow.turns.*;
 import main.gamesetting.*;
 import main.restaurant.*;
-import main.staff.TaskManager;
+import main.staff.task.TaskManager;
 
 public class GameSession implements GameEventListener{
 	

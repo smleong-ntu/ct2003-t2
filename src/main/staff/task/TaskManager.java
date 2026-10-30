@@ -1,4 +1,4 @@
-package main.staff;
+package main.staff.task;
 
 import java.util.List;
 import java.util.ArrayList;

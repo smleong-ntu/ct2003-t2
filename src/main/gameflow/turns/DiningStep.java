@@ -4,8 +4,8 @@ import java.util.List;
 
 import main.gameflow.GameSession;
 import main.gameflow.TurnManager;
-import main.staff.TaskManager;
 import main.staff.*;
+import main.staff.task.TaskManager;
 
 public class DiningStep extends TurnStep{
 

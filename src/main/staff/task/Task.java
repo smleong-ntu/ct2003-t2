@@ -1,4 +1,4 @@
-package main.staff;
+package main.staff.task;
 
 public abstract class Task {
 	

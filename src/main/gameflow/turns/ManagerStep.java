@@ -10,6 +10,7 @@ import java.util.InputMismatchException;
 import main.gameflow.GameSession;
 import main.gameflow.TurnManager;
 import main.staff.*;
+import main.staff.task.*;
 
 public class ManagerStep extends TurnStep {
 	
