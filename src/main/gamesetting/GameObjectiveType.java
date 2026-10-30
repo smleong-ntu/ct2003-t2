@@ -5,6 +5,6 @@ public class GameObjectiveType {
 		name = "Default Objective";
 		paidCustomers = 4;
 		revenue = 45;
-		satisfaction = 60;
+		satisfaction = 60.f;
 	}};
 }

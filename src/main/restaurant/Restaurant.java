@@ -321,6 +321,12 @@ public class Restaurant implements GameSubject{
         addRevenue(order.getLockedPriceCents());
         paidSatisfactions.add(c.getSatisfaction());
         table.vacate();
+        
+        broadcast(new OnRestaurant.PaymentReceived(order.getLockedPriceCents(), revenueCents, paidSatisfactions.size()));
+        broadcast(new OnRestaurant.SatisfactionUpdated(
+        		getAveragePaidSatisfaction().isPresent() ? 
+        		getAveragePaidSatisfaction().getAsDouble() : 0.f
+        		));
     }
 
     /**

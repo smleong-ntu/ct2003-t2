@@ -1,5 +1,6 @@
 package main.gamesetting;
 
+import java.util.function.Function;
 import main.events.*;
 import main.gameflow.GameSession;
 
@@ -9,14 +10,15 @@ public class GameObjective implements GameEventListener {
 		public String name;
 		public int paidCustomers;
 		public int revenue;
-		public int satisfaction;
+		public float satisfaction;
 	}
 	
 	private final String name;
 	private final int paidCustomers;
 	private final int revenue;
-	private final int satisfaction;
+	private final float satisfaction;
 	
+	private Setting tracked;
 	private boolean isCompleted = false;
 	
 	public GameObjective(Setting setting) {
@@ -24,6 +26,8 @@ public class GameObjective implements GameEventListener {
 		paidCustomers = setting.paidCustomers;
 		revenue = setting.revenue;
 		satisfaction = setting.satisfaction;
+		
+		tracked = new Setting();
 	}
 	
 	public void display() {
@@ -35,10 +39,14 @@ public class GameObjective implements GameEventListener {
 	}
 	
 	public void status() {
+		
+		Function<Integer, String> revenueConversion = (i) -> String.format("$%.2f", i / 100.0);
+		
+		System.out.println(">>-------------------------<<");
 		System.out.printf("Objective [%s] completion status %b%n", name, isCompleted);
-		System.out.printf("Total paid customers: %d/%d%n", paidCustomers, paidCustomers);
-		System.out.printf("Total revenue: %d/%d%n", revenue, revenue);
-		System.out.printf("Average satisfaction: %d/%d%n", satisfaction, satisfaction);
+		System.out.printf("Total paid customers: %d/%d%n", tracked.paidCustomers, paidCustomers);
+		System.out.printf("Total revenue: %s/%s%n", revenueConversion.apply(tracked.revenue), revenueConversion.apply(revenue));
+		System.out.printf("Average satisfaction: %.2f/%.2f%n", tracked.satisfaction, satisfaction);
 	}
 	
 	@Override
@@ -49,6 +57,14 @@ public class GameObjective implements GameEventListener {
 				if (onTurnEnd.turn() == GameSession.data().turns()) {
 					isCompleted = true;
 				}
+			}
+			case OnRestaurant.PaymentReceived onPayment -> {
+				tracked.revenue = onPayment.revenue();
+				tracked.paidCustomers = onPayment.paidCustomerCount();
+			}
+			
+			case OnRestaurant.SatisfactionUpdated onSatisfactionUpdated -> {
+				tracked.satisfaction = (float)onSatisfactionUpdated.satisfaction();
 			}
 			
 			default -> {
