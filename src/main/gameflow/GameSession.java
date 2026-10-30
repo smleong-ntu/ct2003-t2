@@ -61,6 +61,7 @@ public class GameSession implements GameEventListener{
 		turnManager.subscribe(placeholderTaskManager);
 		turnManager.subscribe(infoTracker);
 		turnManager.subscribe(turnStartView);
+		turnManager.subscribe(restaurant);
 		turnManager.subscribe(this);
 	}
 	
