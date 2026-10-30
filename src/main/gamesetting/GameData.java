@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.function.Supplier;
+import java.util.function.Function;
 import main.gameflow.turns.*;
+import main.customer.*;
 import main.staff.*;
 
 public class GameData {
@@ -15,7 +17,7 @@ public class GameData {
 		public int tables;
 		public List<Supplier<? extends TurnStep>> stepOrder;
 		public Map<Supplier<? extends Staff>, Integer> staffList;
-		public Map<Integer,String> arrivals;
+		public Map<Integer,Function<Integer, Customer>> arrivals;
 	}
 	
 	private final String name;
@@ -23,7 +25,7 @@ public class GameData {
 	private final int tables;
 	private final List<Supplier<? extends TurnStep>> stepOrder;
 	private final Map<Supplier<? extends Staff>, Integer> staffList;
-	private final Map<Integer, String> arrivals;
+	private final Map<Integer,Function<Integer, Customer>> arrivals;
 	
 	public GameData(Setting setting) {
 		name = setting.name;
@@ -55,5 +57,5 @@ public class GameData {
 	public int tables() { return tables; }
 	public List<Supplier<? extends TurnStep>> stepOrder() { return stepOrder; }
 	public Map<Supplier<? extends Staff>, Integer> staffList() { return staffList; }
-	public Map<Integer, String> arrivals() { return arrivals; };
+	public Map<Integer,Function<Integer, Customer>> arrivals() { return arrivals; };
 }

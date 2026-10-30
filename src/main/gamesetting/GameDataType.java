@@ -5,6 +5,7 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 import main.gameflow.turns.*;
+import main.customer.*;
 import main.staff.*;
 
 public class GameDataType {
@@ -27,25 +28,26 @@ public class GameDataType {
 			//Cashier::new, 1
 		);
 		
+		//Can change type of customer to spawn here
 		arrivals = Map.ofEntries(
-			entry(1, "Customer"),
-			entry(2, "None"),
-			entry(3, "None"),
-			entry(4, "Customer"),
-			entry(5, "None"),
-			entry(6, "None"),
-			entry(7, "Customer"),
-			entry(8, "None"),
-			entry(9, "None"),
-			entry(10, "Customer"),
-			entry(11, "None"),
-			entry(12, "None"),
-			entry(13, "Customer"),
-			entry(14, "None"),
-			entry(15, "None"),
-			entry(16, "Customer"),
-			entry(17, "None"),
-			entry(18, "None")
+			entry(1, id ->  new Customer(id)),
+			entry(2, id ->  null),
+			entry(3, id ->  null),
+			entry(4, id ->  new Customer(id)),
+			entry(5, id ->  null),
+			entry(6, id ->  null),
+			entry(7, id ->  new Customer(id)),
+			entry(8, id ->  null),
+			entry(9, id ->  null),
+			entry(10, id ->  new Customer(id)),
+			entry(11, id ->  null),
+			entry(12, id ->  null),
+			entry(13, id ->  new Customer(id)),
+			entry(14, id ->  null),
+			entry(15, id ->  null),
+			entry(16, id ->  new Customer(id)),
+			entry(17, id ->  null),
+			entry(18, id ->  null)
 		);		
 	}};
 }

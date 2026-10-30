@@ -93,5 +93,6 @@ public class GameSession implements GameEventListener{
 	public static GameData data() { return data; }
 	public static GameSession session() { return session; }
 	
+	public final Restaurant restaurant() { return restaurant; }
 	public TaskManager placeholderTaskManager() { return placeholderTaskManager; }
 }
