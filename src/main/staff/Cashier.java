@@ -2,6 +2,7 @@ package main.staff;
 
 import java.util.List;
 import main.customer.Customer;
+import main.staff.task.TaskType;
 
 /** Stage 1 cashier: automatically handles at most one payment per turn. */
 public class Cashier extends Staff {
@@ -42,5 +43,10 @@ public class Cashier extends Staff {
         customer.markPaid();
         lastPaymentTurn = turn;
         return true;
+    }
+    
+    @Override
+    protected TaskType.Setting getTaskType(){
+    	return TaskType.CASHIER;
     }
 }

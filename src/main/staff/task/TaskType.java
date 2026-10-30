@@ -5,7 +5,7 @@ import java.util.function.Function;
 import main.staff.*;
 
 public class TaskType {
-	private static class Setting{
+	public static class Setting{
 		public List<Function<Staff, ? extends Task>> taskList;
 	}
 	
