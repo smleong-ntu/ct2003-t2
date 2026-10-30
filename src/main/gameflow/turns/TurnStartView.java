@@ -15,13 +15,13 @@ public class TurnStartView extends TurnView {
 	
 	//can retrieve all customers and their order status here
 	private List<Customer> queue = new ArrayList<>();
-	private List<Integer> tables = new ArrayList<>(List.of(0, 1));
 	
 	//Staff tasks???
 	//Just list all options?
 	
 	@Override
 	protected void display() {
+		System.out.println(">>-------------------------<<");
 		System.out.printf("TURN [%d/%d]%n", turn, GameSession.data().turns());
 		System.out.println(">>--Start-of-turn display--<<");
 		System.out.printf("Revenue: %d%n", revenue);
@@ -35,13 +35,19 @@ public class TurnStartView extends TurnView {
 	private void displayQueue() {
 		System.out.printf("Queue: ");		
 		queue.forEach(customer -> {
-			System.out.printf("[%s %d] ", customer.getClass().getSimpleName(), customer.getCustomerId());		
+			System.out.printf("[%s %d], ", customer.getClass().getSimpleName(), customer.getCustomerId());		
 		});
-		System.out.println("");		
+		System.out.println("-");		
 	}
 	
 	private void displayOccupiedTables() {
-		System.out.printf("Tables: %s%n", tables.toString());
+		List<Table> tables = GameSession.session().restaurant().getTables();
+		
+		System.out.printf("Tables: >> ");
+		tables.forEach(table -> {
+			System.out.printf("[%d:%s] >> ", table.getTableNumber(), table.getOccupant() != null ? "Occupied" : "Free");			
+		});
+		System.out.println("-");
 	}
 	
 	private void displayCustomerInfo() {
@@ -58,7 +64,7 @@ public class TurnStartView extends TurnView {
 			System.out.printf("Customer %d >> ", customer.getCustomerId());
 			displayCustomerSatisfaction(customer);
 			displayCustomerOrderStatus(customer);
-			System.out.println();
+			System.out.println("-");
 		});
 	}
 	
