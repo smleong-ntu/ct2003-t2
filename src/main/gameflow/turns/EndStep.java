@@ -1,10 +1,11 @@
 package main.gameflow.turns;
 
-import main.gameflow.TurnManager;
+import main.gameflow.*;
+import main.restaurant.*;
 
 public class EndStep extends TurnStep{
 	
-	//private final Restaurant restaurant;
+	private Restaurant restaurant;
 	
 	@Override
 	public void initialize(TurnManager manager) {
@@ -12,16 +13,14 @@ public class EndStep extends TurnStep{
 		name = "End";
 		
 		//save reference to restaurant to get customers
-		//restaurant = GameSession().session().getRestaurant();
+		restaurant = GameSession.session().restaurant();
 	}
 	
 	@Override
 	public void execute() {
 		
 		//Get customers from restaurant
-		
-		//Tick allows the customer to move one "turn"
-		//forEach(customer -> customer.Tick())
+		restaurant.applyEndOfTurnWaiting();
 		
 		postExecuteAction();
 	}
