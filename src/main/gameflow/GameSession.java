@@ -13,7 +13,7 @@ public class GameSession implements GameEventListener{
 	
 	private GameObjective objective;
 	private TurnManager turnManager;
-	private TurnEndView infoTracker;
+	private TurnEndView turnEndView;
 	private TurnView turnStartView;
 	private Restaurant restaurant;
 	
@@ -45,13 +45,13 @@ public class GameSession implements GameEventListener{
 		objective = new GameObjective(objectiveSetting);
 		
 		//Displays for turn start and end
-		infoTracker = new TurnEndView();
+		turnEndView = new TurnEndView();
 		turnStartView = new TurnStartView();
 		
 		//create restaurant
 		restaurant = new Restaurant(data);
 		restaurant.subscribe(objective);
-		restaurant.subscribe(infoTracker);
+		restaurant.subscribe(turnEndView);
 		restaurant.subscribe(turnStartView);
 		placeholderTaskManager = new TaskManager();
 				
@@ -59,7 +59,7 @@ public class GameSession implements GameEventListener{
 		turnManager = new TurnManager(data);
 		turnManager.subscribe(objective);
 		turnManager.subscribe(placeholderTaskManager);
-		turnManager.subscribe(infoTracker);
+		turnManager.subscribe(turnEndView);
 		turnManager.subscribe(turnStartView);
 		turnManager.subscribe(restaurant);
 		turnManager.subscribe(this);
