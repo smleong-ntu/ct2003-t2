@@ -2,14 +2,14 @@ package main.gameflow.turns;
 
 import java.util.List;
 
-import main.gameflow.GameSession;
-import main.gameflow.TurnManager;
+import main.gameflow.*;
+import main.restaurant.*;
 import main.staff.*;
-import main.staff.task.TaskManager;
+import main.staff.task.*;
 
 public class DiningStep extends TurnStep{
 
-	//private Restaurant restaurant;
+	private Restaurant restaurant;
 	private TaskManager taskManager;
 	
 	@Override
@@ -18,8 +18,7 @@ public class DiningStep extends TurnStep{
 		name = "Dining and Payment";
 		
 		//save reference to restaurant to get customers
-		//restaurant = GameSession().session().getRestaurant();
-		
+		restaurant = GameSession.session().restaurant();
 		taskManager = GameSession.session().placeholderTaskManager();
 	}
 	
@@ -31,13 +30,24 @@ public class DiningStep extends TurnStep{
 		//This makes customers READY_TO_PAY but cannot pay this round
 		
 		//Get cashiers
-		//List<Staff> cashiers = restaurant.getStaffList.get(Cashier.class);
-//		cashiers.forEach(staff -> {
-//			//Create task for cashier and inject dependency
-//			Task t = new CashierTask(staff);
-//			t.execute();
-//			taskManager.addAsCompletedTask(t);
-//		});
+		List<Staff> cashiers = restaurant.getStaffList(Cashier.class);
+		cashiers.forEach(staff -> {
+			
+			for (Task t : staff.getTasks()) {
+				StringBuilder reason = new StringBuilder();
+				
+				//Return first valid task
+				if (t.isTaskValid(reason)) {
+					t.execute(turn);
+					taskManager.addAsCompletedTask(t);
+					break;
+				}
+				
+				System.out.printf("Invalid task: %s%n", reason.toString());
+			}
+			
+			
+		});
 		
 		postExecuteAction();
 	}

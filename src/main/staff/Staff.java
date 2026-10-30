@@ -8,6 +8,7 @@ public abstract class Staff {
 	
     private int staffID;
     private String name;
+    
     protected List<Task> tasks = new ArrayList<>(); //holds all possible tasks
     
     public Staff() {
