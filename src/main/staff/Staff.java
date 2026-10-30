@@ -22,6 +22,9 @@ public abstract class Staff {
         // No action for this turn
     }
     
+    public final List<Task> getTasks() { return tasks; }
+    public int getID() { return staffID; }
+    
     /*Override the setting on each staff type*/
     protected TaskType.Setting getTaskType(){
     	return TaskType.WAITER;

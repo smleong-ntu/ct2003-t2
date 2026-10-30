@@ -42,7 +42,7 @@ public class ManagerStep extends TurnStep {
 	}
 	
 	private void queueTask(Staff s) {
-		List<Task> tasks = findTasks(s);
+		List<Task> tasks = s.getTasks();
 		displayTasks(tasks, s);
 		
 		Task selectedTask = selectTask(tasks);
@@ -51,31 +51,7 @@ public class ManagerStep extends TurnStep {
 			GameSession.session().placeholderTaskManager().queue(selectedTask);
 		}
 	}
-	
-	private List<Task> findTasks(Staff s) {
 		
-		//Get task list of staff object
-		//Placeholder task list, should be directly defined in staff
-		List<Task> tasks = new ArrayList<>();
-		
-		if (s instanceof Waiter) {
-			
-			tasks.add(new GenericTask("task1"));
-			tasks.add(new GenericTask("task2"));
-			return tasks;
-		}
-		
-		if (s instanceof Chef) {
-			tasks.add(new GenericTask("task1"));
-			tasks.add(new GenericTask("task2"));
-			tasks.add(new GenericTask("task3"));
-			tasks.add(new GenericTask("task4"));
-			return tasks;
-		}
-
-		return tasks;
-	}
-	
 	private void displayTasks(List<Task> tasks, Staff s) {
 		
 		System.out.printf("Select a task for Staff: [%s]%n", s.getClass().getSimpleName());

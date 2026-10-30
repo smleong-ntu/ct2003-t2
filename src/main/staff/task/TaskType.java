@@ -13,21 +13,21 @@ public class TaskType {
 		taskList = List.of(
 			staff -> new GenericTask("Waiter [SEAT]"),
 			staff -> new GenericTask("Waiter [SERVE]"),
-			staff -> new WaitTask("Waiter Wait")
+			staff -> new WaitTask("Waiter Wait", staff)
 		);
 	}};
 	
 	public static final TaskType.Setting CHEF = new TaskType.Setting() {{
 		taskList = List.of(
 			staff -> new GenericTask("Chef [PREP]"),
-			staff -> new WaitTask("Chef Wait")
+			staff -> new WaitTask("Chef Wait", staff)
 		);
 	}};
 	
 	public static final TaskType.Setting CASHIER = new TaskType.Setting() {{
 		taskList = List.of(
 			staff -> new CollectPaymentTask("Cashier [COLLECT]", (Cashier)staff),
-			staff -> new WaitTask("Cashier Wait")
+			staff -> new WaitTask("Cashier Wait", staff)
 		);
 	}};
 }

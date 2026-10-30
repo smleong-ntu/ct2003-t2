@@ -10,7 +10,7 @@ public abstract class Task {
 	}
 	
 	public void execute() {
-		System.out.printf("Executing %s: %s%n", this.getClass().getSimpleName(), name);
+		System.out.printf("Executing %s: ", this.getClass().getSimpleName());
 	}
 	public boolean isTaskValid(StringBuilder reason) { return true; }
 	public String taskName() { return name; }
