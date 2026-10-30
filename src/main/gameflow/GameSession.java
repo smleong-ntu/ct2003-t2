@@ -73,6 +73,7 @@ public class GameSession implements GameEventListener{
 		
 		//Display objective status
 		objective.status();
+		System.out.printf("%s%n", objective.isCompleted() ? "VICTORY" : "DEFEAT");
 		
 		//perform cleanup of remaining classes where needed
 		//turnManager.unsubscribe(objective);

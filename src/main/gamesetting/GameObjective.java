@@ -29,21 +29,13 @@ public class GameObjective implements GameEventListener {
 		
 		tracked = new Setting();
 	}
-	
-	public void display() {
-		System.out.printf("Displaying Target Objective [%s]%n", name);
-		System.out.printf("Paid Customers: %d%n", paidCustomers);
-		System.out.printf("Revenue: %d%n", revenue);
-		System.out.printf("Average Satisfaction: %d%n", satisfaction);
-		System.out.println("End Display GameObjective Targets");
-	}
-	
+		
 	public void status() {
 		
 		Function<Integer, String> revenueConversion = (i) -> String.format("$%.2f", i / 100.0);
 		
 		System.out.println(">>-------------------------<<");
-		System.out.printf("Objective [%s] completion status %b%n", name, isCompleted);
+		System.out.printf("Objective [%s] %s%n", name, isCompleted ? "Completed" : "Incomplete");
 		System.out.printf("Total paid customers: %d/%d%n", tracked.paidCustomers, paidCustomers);
 		System.out.printf("Total revenue: %s/%s%n", revenueConversion.apply(tracked.revenue), revenueConversion.apply(revenue));
 		System.out.printf("Average satisfaction: %.2f/%.2f%n", tracked.satisfaction, satisfaction);
@@ -52,25 +44,49 @@ public class GameObjective implements GameEventListener {
 	@Override
 	public void onEvent(GameEvent event) {
 		switch (event) {
-			case OnTurn.End onTurnEnd -> {				
-				//should be checking if it can be completed by referencing restaurant, it could be listening to restaurant instead probably
-				if (onTurnEnd.turn() == GameSession.data().turns()) {
-					isCompleted = true;
-				}
-			}
+//			case OnTurn.End onTurnEnd -> {				
+//				//should be checking if it can be completed by referencing restaurant, it could be listening to restaurant instead probably
+//				if (onTurnEnd.turn() == GameSession.data().turns()) {
+//					isCompleted = true;
+//				}
+//			}
 			case OnRestaurant.PaymentReceived onPayment -> {
 				tracked.revenue = onPayment.revenue();
 				tracked.paidCustomers = onPayment.paidCustomerCount();
+				if (checkCompletionTarget()) { onCompleted(); }
 			}
 			
 			case OnRestaurant.SatisfactionUpdated onSatisfactionUpdated -> {
 				tracked.satisfaction = (float)onSatisfactionUpdated.satisfaction();
+				if (checkCompletionTarget()) { onCompleted(); }
 			}
 			
 			default -> {
 				//System.out.println("payload none: generic event");
 			}
 		}
+	}
+	
+	private boolean checkCompletionTarget() {
+		
+		if (tracked.revenue < revenue) {
+			return false;
+		}
+		
+		if (tracked.satisfaction < satisfaction) {
+			return false;
+		}
+		
+		if (tracked.paidCustomers < paidCustomers) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private void onCompleted() {
+		//can be a broadcast if needed, but use for display now
+		System.out.printf("Objective [%s] is completed%n", name);
 	}
 	
 	public boolean isCompleted() { return isCompleted; }
