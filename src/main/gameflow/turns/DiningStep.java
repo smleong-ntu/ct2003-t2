@@ -26,7 +26,8 @@ public class DiningStep extends TurnStep{
 	public void execute() {
 		
 		//Get seated customers
-		//forEach(customers -> if customer is SERVED, customer.eat()
+		//Only valid when already served
+		restaurant.getOccupiedTables().forEach(table -> table.getOccupant().finishEating(turn));
 		//This makes customers READY_TO_PAY but cannot pay this round
 		
 		//Get cashiers
