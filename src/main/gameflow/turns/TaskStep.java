@@ -23,7 +23,7 @@ public class TaskStep extends TurnStep{
 		while (taskManager.numQueued() > 0) {
 			Task t = taskManager.dequeue();
 			
-			t.execute();
+			t.execute(turn);
 			taskManager.addAsCompletedTask(t);
 		}
 		

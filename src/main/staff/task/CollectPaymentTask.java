@@ -7,8 +7,9 @@ public class CollectPaymentTask extends CashierTask{
 		super(name, cashier);
 	}
 	
-	public void execute() {
-		super.execute();
+	@Override
+	public void execute(int turn) {
+		super.execute(turn);
 		System.out.printf("Collect Payment done by ", this.getClass().getSimpleName(), name);
 	}
 	

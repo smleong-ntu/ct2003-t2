@@ -6,7 +6,8 @@ public class GenericTask extends Task{
 		super(name);
 	}
 	
-	public void execute() {
+	@Override
+	public void execute(int turn) {
 		System.out.printf("Executing Task: %s%n", name);
 	}
 	
