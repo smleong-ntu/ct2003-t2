@@ -6,12 +6,16 @@ import main.menu.Menu;
 import main.menu.MenuItem;
 import main.order.Order;
 import main.order.OrderStatus;
+import main.staff.Staff;
 import main.gamesetting.*;
 import main.events.*;
+import main.gameflow.GameSession;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
@@ -33,6 +37,9 @@ public class Restaurant implements GameSubject{
     private final List<Customer> customers = new ArrayList<>();   // every arrival, in arrival order
     private final List<Integer> paidSatisfactions = new ArrayList<>();   // recorded at payment time
     private int revenueCents;
+    
+  //placeholder staff list, this should come from restaurant
+  	private Map<Class<? extends Staff>, List<Staff>> staffList = new HashMap<>();
     
     /*
      * Listeners for GameSubject
@@ -64,6 +71,15 @@ public class Restaurant implements GameSubject{
     	//binds functions to send waiting queue to listeners when it changes
     	waitingQueue.onQueueAdd(()->broadcast(new OnRestaurant.QueueUpdated(waitingQueue)));
     	waitingQueue.onQueueRemove(()->broadcast(new OnRestaurant.QueueUpdated(waitingQueue)));
+    	
+    	//Create the staff list from data
+    	data.staffList().forEach((key, value) -> {
+			
+			for (int i = 0; i < value; i++) {
+				Staff newStaff = key.get();
+				staffList.computeIfAbsent(newStaff.getClass(), _ -> new ArrayList<>()).add(newStaff);
+			}
+		});
     }
 
     // ------------------------------------------------------------------ arrivals
@@ -369,6 +385,20 @@ public class Restaurant implements GameSubject{
         }
     }
     
+    // ------------------------------------------------------------------ staff
+    public List<Staff> getStaffList(Class<? extends Staff> key){
+    	
+    	if (staffList.containsKey(key)) {
+    		return staffList.get(key);
+    	}
+    	
+    	//Empty list otherwise
+    	return new ArrayList<>();
+    }
+    
+    public Map<Class<? extends Staff>, List<Staff>> getStaffList(){
+    	return staffList;
+    }
     /*
      * GameSubject interface to record and notify listeners
      */

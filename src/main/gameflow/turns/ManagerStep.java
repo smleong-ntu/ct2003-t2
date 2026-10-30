@@ -7,17 +7,15 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
-import main.gameflow.GameSession;
-import main.gameflow.TurnManager;
+import main.gameflow.*;
+import main.restaurant.*;
 import main.staff.*;
 import main.staff.task.*;
 
 public class ManagerStep extends TurnStep {
 	
 	private Scanner input;
-	
-	//placeholder staff list, this should come from restaurant
-	Map<Class<? extends Staff>, List<Staff>> placeholderStaffList = new HashMap<>();
+	private Map<Class<? extends Staff>, List<Staff>> staffList = new HashMap<>();
 	
 	@Override
 	public void initialize(TurnManager manager) {
@@ -25,28 +23,19 @@ public class ManagerStep extends TurnStep {
 		
 		name = "Manager Selection";
 		input = new Scanner(System.in);
-
-		//Placeholder initialization of staff list, can be brought over to restaurant
-		GameSession.data().staffList().forEach((key, value) -> {
-			
-			for (int i = 0; i < value; i++) {
-				Staff newStaff = key.get();
-				placeholderStaffList.computeIfAbsent(newStaff.getClass(), _ -> new ArrayList<>()).add(newStaff);
-			}
-		});
 		
-		//save reference to restaurant or staff list <- since it is non dynamic
+		staffList = GameSession.session().restaurant().getStaffList();
 	}
 	
 	public void execute() {
 				
 		//Get list of staff of staff class type from restaurant
 		//Queue task for waiters
-		List<Staff> waiters = placeholderStaffList.get(Waiter.class);
+		List<Staff> waiters = staffList.get(Waiter.class);
 		waiters.forEach(this::queueTask);
 		
 		//Queue task for chefs
-		List<Staff> chefs = placeholderStaffList.get(Chef.class);
+		List<Staff> chefs = staffList.get(Chef.class);
 		chefs.forEach(this::queueTask);
 				
 		postExecuteAction();
