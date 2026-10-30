@@ -24,8 +24,8 @@ public class GameDataType {
 		
 		staffList = Map.of(
 			Waiter::new, 1,
-			Chef::new, 1
-			//Cashier::new, 1
+			Chef::new, 1,
+			Cashier::new, 1
 		);
 		
 		//Can change type of customer to spawn here
