@@ -1,9 +1,10 @@
 package main.gameflow;
 
 import main.events.*;
-import main.gamesetting.*;
-import main.staff.TaskManager;
 import main.gameflow.turns.*;
+import main.gamesetting.*;
+import main.restaurant.*;
+import main.staff.TaskManager;
 
 public class GameSession implements GameEventListener{
 	
@@ -14,6 +15,7 @@ public class GameSession implements GameEventListener{
 	private TurnManager turnManager;
 	private TurnEndView infoTracker;
 	private TurnView turnStartView;
+	private Restaurant restaurant;
 	
 	//Placeholder
 	private TaskManager placeholderTaskManager;
@@ -37,13 +39,17 @@ public class GameSession implements GameEventListener{
 	
 	//creation of various components
 	private void initialize(GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
+		
+		//Immutable game data to dependency inject into main components
 		data = new GameData(dataSetting);		
 		objective = new GameObjective(objectiveSetting);
+		
+		//Displays for turn start and end
 		infoTracker = new TurnEndView();
 		turnStartView = new TurnStartView();
 		
 		//create restaurant
-		//restaurant = new Restaurant(dataSetting);
+		restaurant = new Restaurant(data);
 		//restaurant.subscribe(infoTracker);
 		//restaurant.subscribe(turnStartView);
 		placeholderTaskManager = new TaskManager();

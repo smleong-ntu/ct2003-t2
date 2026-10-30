@@ -6,6 +6,7 @@ import main.menu.Menu;
 import main.menu.MenuItem;
 import main.order.Order;
 import main.order.OrderStatus;
+import main.gamesetting.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +46,14 @@ public class Restaurant {
         this.waitingQueue = new WaitingQueue();
         this.menu = new Menu();
         this.revenueCents = 0;
+    }
+    
+    /**
+     * Uses gamedata for initalization, calls back to tableCount, but can be done directly in this method
+     * @param data: holds the data for entire game setting, more than 1 setting may be needed to initialize the restaurant
+     */
+    public Restaurant(GameData data) {
+    	this(data.tables());
     }
 
     // ------------------------------------------------------------------ arrivals
