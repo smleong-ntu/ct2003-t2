@@ -28,6 +28,11 @@ public class CollectPaymentTask extends CashierTask{
 	
 	public boolean isTaskValid(StringBuilder reason) {
 		//Do checks here
+		//here is a placeholder check
+		if (GameSession.session().restaurant().getOccupiedTables().size() > 0) {
+			return true;
+		}
+		
 		reason.append(String.format("No paying customers available >>%s<<", name));
 		return false;
 	}
