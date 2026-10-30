@@ -2,8 +2,10 @@ package main.gameflow.turns;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 import main.events.*;
-//import main.restaurant.*;
+import main.restaurant.*;
+import main.order.*;
 import main.customer.*;
 import main.gameflow.GameSession;
 
@@ -13,7 +15,6 @@ public class TurnStartView extends TurnView {
 	
 	//can retrieve all customers and their order status here
 	private List<Customer> queue = new ArrayList<>();
-	//private List<Integer> queue = new ArrayList<>(List.of(19, 27, 80, 24));
 	private List<Integer> tables = new ArrayList<>(List.of(0, 1));
 	
 	//Staff tasks???
@@ -44,23 +45,35 @@ public class TurnStartView extends TurnView {
 	}
 	
 	private void displayCustomerInfo() {
-		List<String> customers = getCustomers();
+		
+		/*This should just be remaining customers in Restaurant*/
+		List<Customer> customers = new ArrayList<>();
+		customers.addAll(queue);
+		
+		GameSession.session().restaurant().getOccupiedTables().forEach(t -> {
+			customers.add(t.getOccupant());
+		});
+		
 		customers.forEach(customer -> {
+			System.out.printf("Customer %d >> ", customer.getCustomerId());
 			displayCustomerSatisfaction(customer);
 			displayCustomerOrderStatus(customer);
+			System.out.println();
 		});
 	}
 	
-	private void displayCustomerSatisfaction(String customer) {
-		System.out.printf("%s satisfaction:%n", customer);
+	private void displayCustomerSatisfaction(Customer customer) {
+		System.out.printf("Satisfaction: %d/100 >> ", customer.getSatisfaction());
 	}
 	
-	private void displayCustomerOrderStatus(String customer) {
-		System.out.printf("%s order:%n", customer);
-	}
-	
-	private List<String> getCustomers() {
-		return new ArrayList<>(List.of("Customer 1", "Customer 2", "Customer 3"));
+	private void displayCustomerOrderStatus(Customer customer) {
+
+		Optional<Order> validateOrder = GameSession.session().restaurant().getOrderOf(customer);
+		
+		validateOrder.ifPresent(order -> {
+			System.out.printf("Order: %s", order.getStatus());	
+		});
+							
 	}
 	
 	public void onEvent(GameEvent event) {
