@@ -24,14 +24,14 @@ public class TurnStartView extends TurnView {
 		System.out.println(">>-------------------------<<");
 		System.out.printf("TURN [%d/%d]%n", turn, GameSession.data().turns());
 		System.out.println(">>--Start-of-turn display--<<");
-		System.out.printf("Revenue: %d%n", revenue);
-		System.out.printf("Average Satisfaction %d%n", satisfaction);
+		displayRevenue();
+		displayAverageSatisfaction();
 		displayQueue();
 		displayOccupiedTables();
 		displayCustomerInfo();
 		System.out.println(">>-------------------------<<");
 	}
-	
+		
 	private void displayQueue() {
 		System.out.printf("Queue: ");		
 		queue.forEach(customer -> {
