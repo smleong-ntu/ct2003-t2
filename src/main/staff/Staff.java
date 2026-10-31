@@ -2,6 +2,7 @@ package main.staff;
 
 import java.util.List;
 import java.util.ArrayList;
+import main.restaurant.*;
 import main.staff.task.*;
 
 public abstract class Staff {
@@ -10,6 +11,7 @@ public abstract class Staff {
     private String name;
     
     protected List<Task> tasks = new ArrayList<>(); //holds all possible tasks
+    protected Restaurant restaurant; //bidirectional association
     
     public Staff() {
     	
@@ -21,6 +23,10 @@ public abstract class Staff {
     
     public void waitTurn() {
         // No action for this turn
+    }
+    
+    public void setRestaurant(Restaurant r) {
+    	restaurant = r;
     }
     
     public final List<Task> getTasks() { return tasks; }

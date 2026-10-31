@@ -78,6 +78,9 @@ public class Restaurant implements GameSubject{
 			for (int i = 0; i < value; i++) {
 				Staff newStaff = key.get();
 				staffList.computeIfAbsent(newStaff.getClass(), _ -> new ArrayList<>()).add(newStaff);
+				
+				//Dependency injection to call critical task related functions
+				newStaff.setRestaurant(this);
 			}
 		});
     }
