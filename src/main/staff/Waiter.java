@@ -3,70 +3,94 @@ package main.staff;
 import java.util.List;
 
 import main.customer.Customer;
-import main.customer.CustomerState;
 import main.menu.MenuItem;
 import main.order.Order;
 import main.restaurant.Restaurant;
 import main.restaurant.Table;
 import main.staff.task.TaskType;
+import main.gameflow.GameSession;
+
 
 public class Waiter extends Staff {
 
+	/*
+	 * Get the next customer waiting to be seated.
+	 *
+	 * WaitingQueue follows FIFO
+	 * (First In First Out).
+	 *
+	 * The first customer in the queue
+	 * should be seated first.
+	 *
+	 * Returns null if nobody is waiting.
+	 */
+	public Customer findWaitingCustomer() {
+
+	    List<Customer> waitingCustomers =
+	            GameSession.session()
+	                    .restaurant()
+	                    .getWaitingQueue()
+	                    .getCustomers();
+
+	    if (waitingCustomers.isEmpty()) {
+
+	        return null;
+	    }
+
+	    // Oldest customer in the queue
+	    return waitingCustomers.get(0);
+	}
+	
+	/*
+	 * Get the next available table.
+	 *
+	 * Restaurant already tracks which tables
+	 * are currently free.
+	 *
+	 * Returns the first available table.
+	 * Returns null if all tables are occupied.
+	 */
+	public Table findAvailableTable() {
+
+	    List<Table> freeTables =
+	            GameSession.session()
+	                    .restaurant()
+	                    .getFreeTables();
+
+	    if (freeTables.isEmpty()) {
+
+	        return null;
+	    }
+
+	    return freeTables.get(0);
+	}
+
+
     /*
-     * Find the first customer still waiting in the queue.
-     * Returns null if everybody has already been seated.
+     * Get the next READY order to serve.
+     *
+     * Restaurant already provides READY orders
+     * in the correct serving order.
+     *
+     * According to Restaurant.java:
+     * READY orders are returned oldest first.
+     *
+     * Returns null if no READY orders exist.
      */
-    public Customer findWaitingCustomer(
-            List<Customer> customers) {
+    public Order findReadyOrder() {
 
-        for (Customer customer : customers) {
+        List<Order> readyOrders =
+                GameSession.session()
+                        .restaurant()
+                        .getReadyOrders();
 
-            // Only customers in QUEUING state
-            // are waiting for a table
-            if (customer.getState() ==
-                    CustomerState.QUEUING) {
+        if (readyOrders.isEmpty()) {
 
-                return customer;
-            }
+            return null;
         }
 
-        return null;
-    }
-
-    /*
-     * Find the first free table.
-     * Returns null if all tables are occupied.
-     */
-    public Table findAvailableTable(
-            List<Table> tables) {
-
-        for (Table table : tables) {
-
-            if (table.isFree()) {
-
-                return table;
-            }
-        }
-
-        return null;
-    }
-
-    /*
-     * Find the first order that is READY to be served.
-     * Returns null if no order is ready.
-     */
-    public Order findReadyOrder(
-            List<Order> orders) {
-
-        for (Order order : orders) {
-
-            if (order.isReady()) {
-
-                return order;
-            }
-        }
-
-        return null;
+        // Serve the oldest READY order first
+        return readyOrders.get(0);
     }
 
     /*
