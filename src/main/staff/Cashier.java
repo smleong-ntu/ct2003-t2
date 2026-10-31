@@ -41,6 +41,7 @@ public class Cashier extends Staff {
             return false;
         }
         customer.markPaid();
+        restaurant.recordPayment(customer);
         lastPaymentTurn = turn;
         return true;
     }
