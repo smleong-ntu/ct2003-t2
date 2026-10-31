@@ -1,6 +1,7 @@
 package main.customer;
 
 import java.util.List;
+import main.menu.*;
 
 /**
  * A Stage 1 regular customer. Rules stay here rather than in the user interface.
@@ -36,11 +37,12 @@ public class Customer {
     }
 
     /** Deterministic choice: customer 1 picks item 1, 2 picks item 2, etc. */
-    public String chooseMenuItem(List<String> menu) {
-        if (menu == null || menu.isEmpty()) {
+    public MenuItem chooseMenuItem(Menu menu) {
+    	
+    	if (menu == null || menu.getAllItems().size() == 0) {
             throw new IllegalArgumentException("The menu must have items.");
         }
-        return menu.get((customerId - 1) % menu.size());
+        return menu.getAllItems().get((customerId - 1) % menu.getAllItems().size());
     }
 
     /** Called when the Waiter records this customer's chosen item and price. */

@@ -18,19 +18,19 @@ public class TakeOrderTask extends WaiterTask {
 		Restaurant restaurant = GameSession.session().restaurant();
 		List<Table> occupiedTables = restaurant.getOccupiedTables();
 		
-		Customer c = null;
+		Customer customer = null;
 		for (int i = 0; i < occupiedTables.size(); i++) {
 			
 			//At least one customer is in seated state - ready for order to be taken
 			if (occupiedTables.get(i).getOccupant().getState() == CustomerState.SEATED) {
-				c = occupiedTables.get(i).getOccupant();
+				customer = occupiedTables.get(i).getOccupant();
 				break;
 			}
 		}
-		
-		if (c != null) {
-			//Take order
-			//waiter.takeOrder(restaurant, c, c.getMenuItemName(), turn);			
+
+		//Take order
+		if (customer != null) {
+			waiter.takeOrder(restaurant, customer, customer.chooseMenuItem(restaurant.getMenu()), turn);			
 		}
 	}
 	
