@@ -20,7 +20,7 @@ public class TaskType {
 	
 	public static final TaskType.Setting CHEF = new TaskType.Setting() {{
 		taskList = List.of(
-			staff -> new GenericTask("Prepare Order"),
+			staff -> new PrepareOrderTask("Prepare Order", (Chef)staff),
 			staff -> new WaitTask("Wait", staff)
 		);
 	}};
