@@ -74,13 +74,13 @@ public class ManagerStep extends TurnStep {
 			return null;
 		}
 		
-		//builds a reason should the task be invalid
-		StringBuilder reason = new StringBuilder();
-		
 		boolean isValidChoice = false;
 		int selection;
 		
 		do {
+			//builds a reason should the task be invalid
+			StringBuilder reason = new StringBuilder();
+			
 			selection = -1;
 			
 			try {
@@ -106,7 +106,7 @@ public class ManagerStep extends TurnStep {
 			System.out.printf("Selected [%d]%n", selection + 1);
 			
 			if (!isValidChoice) {
-				System.out.printf("Invalid choice due to %s. Try again%n", reason.toString()); //need show reason for task invalid
+				System.out.printf("%s. Try another choice%n", reason.toString()); //need show reason for task invalid
 			}
 			
 		} while (!isValidChoice);
