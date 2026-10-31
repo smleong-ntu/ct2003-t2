@@ -14,6 +14,24 @@ public class TakeOrderTask extends WaiterTask {
 	@Override
 	public void execute(int turn) {
 		super.execute(turn);
+		
+		Restaurant restaurant = GameSession.session().restaurant();
+		List<Table> occupiedTables = restaurant.getOccupiedTables();
+		
+		Customer c = null;
+		for (int i = 0; i < occupiedTables.size(); i++) {
+			
+			//At least one customer is in seated state - ready for order to be taken
+			if (occupiedTables.get(i).getOccupant().getState() == CustomerState.SEATED) {
+				c = occupiedTables.get(i).getOccupant();
+				break;
+			}
+		}
+		
+		if (c != null) {
+			//Take order
+			//waiter.takeOrder(restaurant, c, c.getMenuItemName(), turn);			
+		}
 	}
 	
 	@Override

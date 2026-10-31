@@ -1,6 +1,8 @@
 package main.staff.task;
 
 import main.gameflow.GameSession;
+import main.restaurant.*;
+import main.order.*;
 import main.staff.Chef;
 
 public class PrepareOrderTask extends ChefTask {
@@ -12,6 +14,13 @@ public class PrepareOrderTask extends ChefTask {
 	@Override
 	public void execute(int turn) {
 		super.execute(turn);
+		
+		Restaurant restaurant = GameSession.session().restaurant();
+		Order order = chef.findOrderToPrepare(restaurant.getOrdersInKitchen());
+		
+		if (order != null) {
+			chef.prepareOrder(order);			
+		}
 	}
 	
 	@Override

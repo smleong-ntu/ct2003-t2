@@ -1,6 +1,8 @@
 package main.staff.task;
 
 import main.gameflow.GameSession;
+import main.restaurant.*;
+import main.customer.*;
 import main.staff.Waiter;
 
 public class SeatTask extends WaiterTask{
@@ -12,6 +14,11 @@ public class SeatTask extends WaiterTask{
 	@Override
 	public void execute(int turn) {
 		super.execute(turn);
+		
+		Restaurant restaurant = GameSession.session().restaurant();
+		Customer c = waiter.findWaitingCustomer(restaurant.getWaitingQueue().getCustomers());
+		Table t = waiter.findAvailableTable(restaurant.getFreeTables());
+		waiter.seatCustomer(restaurant, c, t);
 	}
 	
 	@Override
