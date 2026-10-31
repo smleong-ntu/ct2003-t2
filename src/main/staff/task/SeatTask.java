@@ -19,8 +19,8 @@ public class SeatTask extends WaiterTask{
 		super.execute(turn);
 		
 		Restaurant restaurant = GameSession.session().restaurant();
-		Customer c = waiter.findWaitingCustomer(restaurant.getWaitingQueue().getCustomers());
-		Table t = waiter.findAvailableTable(restaurant.getFreeTables());
+		Customer c = waiter.findWaitingCustomer();
+		Table t = waiter.findAvailableTable();
 		waiter.seatCustomer(restaurant, c, t);
 	}
 	

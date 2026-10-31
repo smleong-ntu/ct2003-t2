@@ -8,7 +8,6 @@ import main.order.Order;
 import main.restaurant.Restaurant;
 import main.restaurant.Table;
 import main.staff.task.TaskType;
-import main.gameflow.GameSession;
 
 
 public class Waiter extends Staff {
@@ -26,11 +25,9 @@ public class Waiter extends Staff {
 	 */
 	public Customer findWaitingCustomer() {
 
-	    List<Customer> waitingCustomers =
-	            GameSession.session()
-	                    .restaurant()
-	                    .getWaitingQueue()
-	                    .getCustomers();
+		List<Customer> waitingCustomers =
+		        restaurant.getWaitingQueue()
+		                  .getCustomers();
 
 	    if (waitingCustomers.isEmpty()) {
 
@@ -52,10 +49,8 @@ public class Waiter extends Staff {
 	 */
 	public Table findAvailableTable() {
 
-	    List<Table> freeTables =
-	            GameSession.session()
-	                    .restaurant()
-	                    .getFreeTables();
+		List<Table> freeTables =
+		        restaurant.getFreeTables();
 
 	    if (freeTables.isEmpty()) {
 
@@ -79,10 +74,8 @@ public class Waiter extends Staff {
      */
     public Order findReadyOrder() {
 
-        List<Order> readyOrders =
-                GameSession.session()
-                        .restaurant()
-                        .getReadyOrders();
+    	List<Order> readyOrders =
+    	        restaurant.getReadyOrders();
 
         if (readyOrders.isEmpty()) {
 

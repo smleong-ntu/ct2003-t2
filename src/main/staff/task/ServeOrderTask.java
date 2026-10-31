@@ -17,7 +17,7 @@ public class ServeOrderTask extends WaiterTask{
 		super.execute(turn);
 		
 		Restaurant restaurant = GameSession.session().restaurant();
-		Order order = waiter.findReadyOrder(restaurant.getReadyOrders());
+		Order order = waiter.findReadyOrder();
 		
 		if (order != null) {
 			waiter.serveOrder(order);			
