@@ -105,10 +105,11 @@ public class Waiter extends Staff {
         }
 
         try {
-
-            restaurant.seatCustomer(
-                    customer,
-                    table);
+        	
+        	//Informs restaurant of new customer mapping to table
+        	//Makes the customer actually sit at the reserved table
+            restaurant.seatCustomer(customer, table);
+            customer.seatAtTable(table.getTableNumber());
 
             return true;
 
