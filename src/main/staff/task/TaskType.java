@@ -11,23 +11,24 @@ public class TaskType {
 	
 	public static final TaskType.Setting WAITER = new TaskType.Setting() {{
 		taskList = List.of(
-			staff -> new GenericTask("Waiter [SEAT]"),
-			staff -> new GenericTask("Waiter [SERVE]"),
-			staff -> new WaitTask("Waiter Wait", staff)
+			staff -> new SeatTask("Seat Customer", (Waiter)staff),
+			staff -> new TakeOrderTask("Take Order", (Waiter)staff),
+			staff -> new ServeOrderTask("Serve Order", (Waiter)staff),
+			staff -> new WaitTask("Wait", staff)
 		);
 	}};
 	
 	public static final TaskType.Setting CHEF = new TaskType.Setting() {{
 		taskList = List.of(
-			staff -> new GenericTask("Chef [PREP]"),
-			staff -> new WaitTask("Chef Wait", staff)
+			staff -> new GenericTask("Prepare Order"),
+			staff -> new WaitTask("Wait", staff)
 		);
 	}};
 	
 	public static final TaskType.Setting CASHIER = new TaskType.Setting() {{
 		taskList = List.of(
-			staff -> new CollectPaymentTask("Cashier [COLLECT]", (Cashier)staff),
-			staff -> new WaitTask("Cashier Wait", staff)
+			staff -> new CollectPaymentTask("Collect Payment", (Cashier)staff),
+			staff -> new WaitTask("Wait", staff)
 		);
 	}};
 }
