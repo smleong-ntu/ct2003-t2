@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import main.gameflow.GameSession;
 import main.customer.*;
 import main.staff.*;
+import main.staff.task.Task.Pending;
 
 public class CollectPaymentTask extends CashierTask{
 	public CollectPaymentTask(String name, Cashier cashier) {
@@ -35,5 +36,11 @@ public class CollectPaymentTask extends CashierTask{
 		
 		reason.append(String.format("No paying customers available >>%s<<", name));
 		return false;
+	}
+	
+	@Override
+	protected void setPendingInfo() {
+		super.setPendingInfo();
+		pending.add(Pending.PAYMENT);
 	}
 }

@@ -56,4 +56,10 @@ public class TakeOrderTask extends WaiterTask {
 		reason.append("Invalid Task: All customers seated at tables have been served");
 		return false;
 	}
+	
+	@Override
+	protected void setPendingInfo() {
+		super.setPendingInfo();
+		pending.add(Pending.ORDER);
+	}
 }

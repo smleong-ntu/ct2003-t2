@@ -7,6 +7,7 @@ import java.util.List;
 
 import main.customer.*;
 import main.staff.Waiter;
+import main.staff.task.Task.Pending;
 
 public class SeatTask extends WaiterTask{
 	
@@ -42,5 +43,12 @@ public class SeatTask extends WaiterTask{
 		
 		//There is a customer in queue AND an available table
 		return true;
+	}
+	
+	@Override
+	protected void setPendingInfo() {
+		super.setPendingInfo();
+		pending.add(Pending.CUSTOMER);
+		pending.add(Pending.TABLE);
 	}
 }

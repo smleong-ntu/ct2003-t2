@@ -6,6 +6,7 @@ import main.gameflow.GameSession;
 import main.restaurant.*;
 import main.order.*;
 import main.staff.Chef;
+import main.staff.task.Task.Pending;
 
 public class PrepareOrderTask extends ChefTask {
 	
@@ -35,5 +36,11 @@ public class PrepareOrderTask extends ChefTask {
 		
 		//There is at least one order that is PLACED or IN_PREPARATION
 		return true;
+	}
+	
+	@Override
+	protected void setPendingInfo() {
+		super.setPendingInfo();
+		pending.add(Pending.PREPARE);
 	}
 }

@@ -6,6 +6,7 @@ import main.gameflow.GameSession;
 import main.restaurant.*;
 import main.order.*;
 import main.staff.Waiter;
+import main.staff.task.Task.Pending;
 
 public class ServeOrderTask extends WaiterTask{
 	public ServeOrderTask(String name, Waiter waiter) {
@@ -16,7 +17,6 @@ public class ServeOrderTask extends WaiterTask{
 	public void execute(int turn) {
 		super.execute(turn);
 		
-		Restaurant restaurant = GameSession.session().restaurant();
 		Order order = waiter.findReadyOrder();
 		
 		if (order != null) {
@@ -34,5 +34,11 @@ public class ServeOrderTask extends WaiterTask{
 		
 		//At least one order in READY state
 		return true;
+	}
+	
+	@Override
+	protected void setPendingInfo() {
+		super.setPendingInfo();
+		pending.add(Pending.SERVE);
 	}
 }
