@@ -23,12 +23,6 @@ public class TaskManager implements GameEventListener {
 		completedTasks.add(t);
 	}
 	
-	private void displayCompletedTasks() {
-		completedTasks.forEach(task -> {
-			System.out.printf("Task: %s%n", task.name);
-		});
-	}
-	
 	@Override
 	public void onEvent(GameEvent event) {
 		switch (event) {
@@ -38,5 +32,12 @@ public class TaskManager implements GameEventListener {
 		}
 	}
 	
-	public int numQueued() { return queuedTasks.size(); }
+	public final int numQueued() { return queuedTasks.size(); }
+	public final List<Task> getQueuedTasks() { return List.copyOf(queuedTasks); }
+	
+	private void displayCompletedTasks() {
+		completedTasks.forEach(task -> {
+			System.out.printf("Task: %s%n", task.name);
+		});
+	}
 }

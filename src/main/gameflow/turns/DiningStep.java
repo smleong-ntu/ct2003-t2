@@ -38,7 +38,7 @@ public class DiningStep extends TurnStep{
 				StringBuilder reason = new StringBuilder();
 				
 				//Return first valid task
-				if (t.isTaskValid(reason)) {
+				if (t.isTaskValid(reason, taskManager.getQueuedTasks())) {
 					t.execute(turn);
 					taskManager.addAsCompletedTask(t);
 					break;

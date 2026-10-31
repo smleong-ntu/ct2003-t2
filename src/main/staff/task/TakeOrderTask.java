@@ -35,7 +35,7 @@ public class TakeOrderTask extends WaiterTask {
 	}
 	
 	@Override
-	public boolean isTaskValid(StringBuilder reason) {
+	public boolean isTaskValid(StringBuilder reason, List<Task> taskQueue) {
 		
 		List<Table> occupiedTables = GameSession.session().restaurant().getOccupiedTables();
 		

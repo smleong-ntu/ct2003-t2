@@ -77,6 +77,8 @@ public class ManagerStep extends TurnStep {
 		boolean isValidChoice = false;
 		int selection;
 		
+		List<Task> queuedTasks = GameSession.session().placeholderTaskManager().getQueuedTasks();
+		
 		do {
 			//builds a reason should the task be invalid
 			StringBuilder reason = new StringBuilder();
@@ -87,7 +89,7 @@ public class ManagerStep extends TurnStep {
 				selection = input.nextInt() - 1;			
 				
 				//This version will check task valid every time this is called
-				isValidChoice = tasks.get(selection).isTaskValid(reason);
+				isValidChoice = tasks.get(selection).isTaskValid(reason, queuedTasks);
 			}
 			
 			catch (InputMismatchException e){

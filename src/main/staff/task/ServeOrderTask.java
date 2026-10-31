@@ -1,5 +1,7 @@
 package main.staff.task;
 
+import java.util.List;
+
 import main.gameflow.GameSession;
 import main.restaurant.*;
 import main.order.*;
@@ -23,7 +25,7 @@ public class ServeOrderTask extends WaiterTask{
 	}
 	
 	@Override
-	public boolean isTaskValid(StringBuilder reason) {
+	public boolean isTaskValid(StringBuilder reason, List<Task> taskQueue) {
 		
 		if (GameSession.session().restaurant().getReadyOrders().size() == 0) {
 			reason.append("Invalid Task: No ready orders to serve");

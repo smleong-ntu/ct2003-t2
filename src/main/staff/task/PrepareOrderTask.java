@@ -1,5 +1,7 @@
 package main.staff.task;
 
+import java.util.List;
+
 import main.gameflow.GameSession;
 import main.restaurant.*;
 import main.order.*;
@@ -24,7 +26,7 @@ public class PrepareOrderTask extends ChefTask {
 	}
 	
 	@Override
-	public boolean isTaskValid(StringBuilder reason) {
+	public boolean isTaskValid(StringBuilder reason, List<Task> taskQueue) {
 		
 		if (GameSession.session().restaurant().getOrdersInKitchen().size() == 0) {
 			reason.append("Invalid Task: No available orders can be prepared in kitchen");

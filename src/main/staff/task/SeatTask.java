@@ -2,6 +2,9 @@ package main.staff.task;
 
 import main.gameflow.GameSession;
 import main.restaurant.*;
+
+import java.util.List;
+
 import main.customer.*;
 import main.staff.Waiter;
 
@@ -22,7 +25,7 @@ public class SeatTask extends WaiterTask{
 	}
 	
 	@Override
-	public boolean isTaskValid(StringBuilder reason) {
+	public boolean isTaskValid(StringBuilder reason, List<Task> taskQueue) {
 		
 		if (GameSession.session().restaurant().getWaitingQueue().size() == 0) {
 			
