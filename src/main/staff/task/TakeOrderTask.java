@@ -5,6 +5,7 @@ import main.gameflow.GameSession;
 import main.staff.Waiter;
 import main.restaurant.*;
 import main.customer.*;
+import main.menu.*;
 
 public class TakeOrderTask extends WaiterTask {
 	public TakeOrderTask(String name, Waiter waiter) {
@@ -17,7 +18,10 @@ public class TakeOrderTask extends WaiterTask {
 		
 		Restaurant restaurant = GameSession.session().restaurant();
 		Customer customer = seatedCustomers().get(target);
-		waiter.takeOrder(restaurant, customer, customer.chooseMenuItem(restaurant.getMenu()), turn);
+		MenuItem item = customer.chooseMenuItem(restaurant.getMenu());
+		waiter.takeOrder(restaurant, customer, item, turn);
+		
+		System.out.printf("Customer %d has selected %s%n", customer.getCustomerId(), item.getName());
 	}
 	
 	@Override
