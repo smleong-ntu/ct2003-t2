@@ -14,7 +14,7 @@ public class TurnEndView extends TurnView {
 		System.out.println(">>-------------------------<<");
 		System.out.printf("TURN [%d/%d] SUMMARY%n", turn, GameSession.data().turns());
 		System.out.printf("Total Served: %d%n", served);
-		System.out.printf("Unhappy Departures: %n", unhappyDepartures);
+		System.out.printf("Unhappy Departures: %d%n", unhappyDepartures);
 		displayRevenue();
 		displayAverageSatisfaction();
 	}
@@ -23,6 +23,8 @@ public class TurnEndView extends TurnView {
 		switch (event) {
 			case OnTurn.Start onTurnStart -> {turn = onTurnStart.turn();}
 			case OnTurn.Completed onTurnCompleted -> { display(); }
+			case OnRestaurant.Departure onDeparture -> { unhappyDepartures = onDeparture.departed(); }
+			case OnRestaurant.ServedOrder onServed -> { served = onServed.count(); }
 			default -> {}
 		}
 	}

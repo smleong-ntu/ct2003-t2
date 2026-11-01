@@ -32,4 +32,18 @@ public class OnRestaurant {
 		public SatisfactionUpdated(double satisfaction) { this.satisfaction = satisfaction; }
 		public double satisfaction() { return satisfaction; }
 	}
+	
+	public static class Departure implements GameEvent{
+		private final int departed;
+		
+		public Departure(int departed) { this.departed = departed; }
+		public final int departed() { return departed; }
+	}
+	
+	public static class ServedOrder implements GameEvent{
+		private final int count;
+		
+		public ServedOrder(int count) { this.count = count; }
+		public final int count() { return count; }
+	}
 }

@@ -98,6 +98,7 @@ public class Restaurant implements GameSubject{
     	
     	else {
     		recordDeparture(c);
+    		broadcast(new OnRestaurant.Departure(getDepartedCustomers().size()));
     	}
     }
 
@@ -219,7 +220,7 @@ public class Restaurant implements GameSubject{
         }
         orders.add(order);
     }
-
+        
     /** Every order placed this game, oldest first (read-only). */
     public List<Order> getOrders() {
         return Collections.unmodifiableList(orders);
@@ -256,7 +257,11 @@ public class Restaurant implements GameSubject{
         }
         return Collections.unmodifiableList(result);
     }
-
+    
+    public void onServeOrder(Order order) {
+    	broadcast(new OnRestaurant.ServedOrder(getServedCount()));
+    }
+    
     /** Number of orders that have been served (SERVED or PAID), for the end-of-turn display. */
     public int getServedCount() {
         int count = 0;

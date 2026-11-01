@@ -177,6 +177,7 @@ public class Waiter extends Staff {
 
             order.markServed();
             order.getOwner().receiveOrder();
+            restaurant.onServeOrder(order);
 
             return true;
 
