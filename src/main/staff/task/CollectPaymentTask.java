@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import main.gameflow.GameSession;
 import main.customer.*;
 import main.staff.*;
-import main.staff.task.Task.Pending;
 
 public class CollectPaymentTask extends CashierTask{
 	public CollectPaymentTask(String name, Cashier cashier) {
@@ -27,11 +26,17 @@ public class CollectPaymentTask extends CashierTask{
 		}
 	}
 	
-	public boolean isTaskValid(StringBuilder reason) {
+	@Override
+	public boolean isTaskValid(StringBuilder reason, List<Task> taskQueue) {
 		//Do checks here
-		//here is a placeholder check
-		if (GameSession.session().restaurant().getOccupiedTables().size() > 0) {
-			return true;
+		List<Customer> customers = new ArrayList<>();	
+		GameSession.session().restaurant().getOccupiedTables().forEach(table -> customers.add(table.getOccupant()));
+		
+		for (int i = 0; i < customers.size(); i++) {
+			if (customers.get(i).getState() == CustomerState.READY_TO_PAY) {
+				System.out.println ("VALIDATED TASK");
+				return true;
+			}
 		}
 		
 		reason.append(String.format("No paying customers available >>%s<<", name));
