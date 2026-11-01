@@ -1,10 +1,14 @@
 package main.gameflow.turns;
 
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import main.events.*;
 import main.restaurant.*;
+import main.staff.*;
+import main.staff.task.*;
 import main.order.*;
 import main.customer.*;
 import main.gameflow.GameSession;
@@ -18,10 +22,11 @@ public class TurnStartView extends TurnView {
 	private String queueDisplay;
 	
 	//Staff tasks???
-	//Just list all options?
+	Map<Class<? extends Task>, String> taskMap = new HashMap<>();
 	
 	@Override
 	protected void display() {
+		
 		System.out.println(">>-------------------------<<");
 		System.out.printf("TURN [%d/%d]%n", turn, GameSession.data().turns());
 		//System.out.println(">>--Start-of-turn display--<<");
@@ -30,6 +35,7 @@ public class TurnStartView extends TurnView {
 		displayQueue();
 		displayOccupiedTables();
 		displayCustomerInfo();
+		displayAllTasks();
 		System.out.println(">>-------------------------<<");
 	}
 		
@@ -93,6 +99,42 @@ public class TurnStartView extends TurnView {
 //		});							
 	}
 	
+	private void displayAllTasks() {
+		
+		if (taskMap.isEmpty()) {
+			populateTaskMap();
+		}
+		
+		System.out.printf("Tasks: ");
+		taskMap.forEach((key, value) -> {
+			System.out.printf("%s", value);
+			System.out.print(" | ");
+		});
+		System.out.println();
+	}
+	
+	private void populateTaskMap() {
+		var staffList = GameSession.session().restaurant().getStaffList();
+		
+		//Go through every type of waiter and its tasks to display
+		List<Staff> waiters = staffList.get(Waiter.class);
+		
+		waiters.forEach(waiter -> {
+			waiter.getTasks().forEach(task ->{
+				taskMap.putIfAbsent(task.getClass(), task.taskName());
+			});
+		});
+
+		List<Staff> chefs = staffList.get(Chef.class);
+		
+		//Go through every type of chef and its tasks to display
+		chefs.forEach(chef -> {
+			chef.getTasks().forEach(task ->{
+				taskMap.putIfAbsent(task.getClass(), task.taskName());
+			});
+		});
+	}
+	
 	public void onEvent(GameEvent event) {
 		super.onEvent(event);
 		
@@ -103,6 +145,7 @@ public class TurnStartView extends TurnView {
 				queue = List.copyOf(onQueueUpdated.waitingQueue().getCustomers());
 				queueDisplay = onQueueUpdated.waitingQueue().toString();
 			}
+			
 			default -> {}
 		}
 	}
