@@ -24,11 +24,11 @@ public class ArrivalStep extends TurnStep {
 		Customer customer = GameSession.data().arrivals().get(turn).apply(turn);
 		
 		if (customer == null) {
-			System.out.printf("No customer [Turn %d]%n", turn);
+			System.out.println("N/A");
 		}
 		
 		else {
-			System.out.printf("Customer arrival [Turn %d]%n", turn);
+			//System.out.println("Customer arrival");
 			
 			//Push to restaurant queue
 			restaurant.addArrival(customer);

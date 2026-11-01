@@ -10,7 +10,7 @@ public class TaskManager implements GameEventListener {
 	
 	public void queue(Task t) {
 		queuedTasks.add(t);
-		System.out.printf("Adding %s to task queue%n", t.taskName());
+		//System.out.printf("Adding %s to task queue%n", t.taskName());
 	}
 	
 	public Task dequeue() {
@@ -26,8 +26,8 @@ public class TaskManager implements GameEventListener {
 	@Override
 	public void onEvent(GameEvent event) {
 		switch (event) {
-			case OnTurn.Reset onTurnReset -> { completedTasks.clear(); System.out.printf("Reset completed task for turn %d%n", onTurnReset.turn()); }
-			case OnTurn.End onTurnEnd -> { System.out.printf("Completed tasks for turn %d%n", onTurnEnd.turn()); displayCompletedTasks(); }
+			case OnTurn.Reset onTurnReset -> { completedTasks.clear(); /*System.out.printf("Reset completed task for turn %d%n", onTurnReset.turn());*/ }
+			case OnTurn.End onTurnEnd -> { /*System.out.printf("Completed tasks for turn %d%n", onTurnEnd.turn()); displayCompletedTasks();*/ }
 			default -> {}
 		}
 	}

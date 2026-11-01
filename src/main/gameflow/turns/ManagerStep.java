@@ -54,11 +54,11 @@ public class ManagerStep extends TurnStep {
 		
 	private void displayTasks(List<Task> tasks, Staff s) {
 		
-		System.out.printf("Select a task for Staff: [%s]%n", s.getClass().getSimpleName());
+		System.out.printf("Select a task for [%s]%n", s.getClass().getSimpleName());
 		
 		//Display if no choices
 		if (tasks.size() == 0) {
-			System.out.printf("Staff: [%s] has no tasks", s.getClass().getSimpleName());
+			System.out.printf("[%s] has no tasks", s.getClass().getSimpleName());
 			return;
 		}
 		
@@ -105,7 +105,7 @@ public class ManagerStep extends TurnStep {
 				continue;
 			}
 	
-			System.out.printf("Selected [%d]%n", selection + 1);
+			//System.out.printf("Selected [%d]%n", selection + 1);
 			
 			if (!isValidChoice) {
 				System.out.printf("%s. Try another choice%n", reason.toString()); //need show reason for task invalid

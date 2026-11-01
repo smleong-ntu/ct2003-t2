@@ -137,12 +137,12 @@ public class Customer {
     	
     	if (pendingTransition != null) {
     		state = pendingTransition;
-    		System.out.printf("Transition customer [%d] -> [%s]%n", customerId, state.toString());
+    		//System.out.printf("Transition customer [%d] -> [%s]%n", customerId, state.toString());
     		pendingTransition = null;
     		return;
     	}
     	
-    	System.out.printf("No transition pending for customer [%d]%n", customerId);
+    	//System.out.printf("No transition pending for customer [%d]%n", customerId);
     }
     
     /** Applies Stage 1 waiting loss once at the end of each game turn. */
