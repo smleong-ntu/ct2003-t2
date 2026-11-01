@@ -23,7 +23,7 @@ public class TurnStartView extends TurnView {
 	protected void display() {
 		System.out.println(">>-------------------------<<");
 		System.out.printf("TURN [%d/%d]%n", turn, GameSession.data().turns());
-		System.out.println(">>--Start-of-turn display--<<");
+		//System.out.println(">>--Start-of-turn display--<<");
 		displayRevenue();
 		displayAverageSatisfaction();
 		displayQueue();
@@ -43,11 +43,16 @@ public class TurnStartView extends TurnView {
 	private void displayOccupiedTables() {
 		List<Table> tables = GameSession.session().restaurant().getTables();
 		
-		System.out.printf("Tables: >> ");
+		System.out.printf("Tables: ");
 		tables.forEach(table -> {
-			System.out.printf("[%d:%s] >> ", table.getTableNumber(), table.getOccupant() != null ? "Occupied" : "Free");			
+			System.out.printf("[%d:%s] >> ", 
+					table.getTableNumber(), 
+					table.getOccupant() != null ? 
+							String.format("Customer %d", table.getOccupant().getCustomerId()) : 
+							"Free"
+			);			
 		});
-		System.out.println("-");
+		System.out.println();
 	}
 	
 	private void displayCustomerInfo() {
@@ -64,7 +69,6 @@ public class TurnStartView extends TurnView {
 			System.out.printf("Customer %d >> ", customer.getCustomerId());
 			displayCustomerSatisfaction(customer);
 			displayCustomerOrderStatus(customer);
-			System.out.println("-");
 		});
 	}
 	
@@ -76,10 +80,20 @@ public class TurnStartView extends TurnView {
 
 		Optional<Order> validateOrder = GameSession.session().restaurant().getOrderOf(customer);
 		
-		validateOrder.ifPresent(order -> {
-			System.out.printf("Order: %s", order.getStatus());	
-		});
-							
+		validateOrder.ifPresentOrElse(
+			//Present
+			order -> {
+				System.out.printf("Order: %s%n", order.getStatus()); 
+			},
+			
+			//Or else
+			() -> { 
+				System.out.println("Order[X]"); 
+			}
+		);
+//		validateOrder.ifPresent(order -> {
+//			System.out.printf("Order: %s", order.getStatus());	
+//		});							
 	}
 	
 	public void onEvent(GameEvent event) {
