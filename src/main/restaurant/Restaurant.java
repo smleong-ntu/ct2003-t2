@@ -368,6 +368,7 @@ public class Restaurant implements GameSubject{
     }
     
     //REVIEW: Why is the restaurant applying this in the first place? what is the role of the restaurant?
+    //Somewhat deprecated through exit binding, no longer need to call this from TurnManager->EndStep
     /**
      * Applies the end-of-turn waiting loss to every queued or seated customer who has not been
      * served, and cleans up after anyone who leaves. Returns the customers who left.
