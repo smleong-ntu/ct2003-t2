@@ -29,12 +29,21 @@ public class PrepareOrderTask extends ChefTask {
 	@Override
 	public boolean isTaskValid(StringBuilder reason, List<Task> taskQueue) {
 		
-		if (GameSession.session().restaurant().getOrdersInKitchen().size() == 0) {
+		int pendingOrders = 0;
+		for (Task t : taskQueue) {
+			if (t.getPendingInfo().contains(Pending.ORDER)){
+				pendingOrders ++;
+			}
+		}
+		
+		int validOrders = GameSession.session().restaurant().getOrdersInKitchen().size() + pendingOrders;
+		
+		if (validOrders == 0) {
 			reason.append("Invalid Task: No available orders can be prepared in kitchen");
 			return false;
 		}
 		
-		//There is at least one order that is PLACED or IN_PREPARATION
+		//There is at least one order that is PLACED or IN_PREPARATION or pending to be created
 		return true;
 	}
 	
