@@ -34,7 +34,6 @@ public class CollectPaymentTask extends CashierTask{
 		
 		for (int i = 0; i < customers.size(); i++) {
 			if (customers.get(i).getState() == CustomerState.READY_TO_PAY) {
-				System.out.println ("VALIDATED TASK");
 				return true;
 			}
 		}
