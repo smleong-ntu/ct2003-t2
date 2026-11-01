@@ -66,7 +66,7 @@ public class TurnStartView extends TurnView {
 		});
 		
 		customers.forEach(customer -> {
-			System.out.printf("Customer %d [%s] >> ", customer.getCustomerId(), customer.getState().toString());
+			System.out.printf("Customer %d [%s] >> ", customer.getCustomerId(), customer.getStateFull());
 			displayCustomerSatisfaction(customer);
 			displayCustomerOrderStatus(customer);
 		});

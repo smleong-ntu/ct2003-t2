@@ -1,9 +1,7 @@
 package main.customer;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.BiConsumer;
-import main.restaurant.*;
 import main.menu.*;
 import main.order.*;
 
@@ -208,9 +206,16 @@ public class Customer {
                 || state == CustomerState.WAITING_FOR_FOOD;
     }
 
-    public int getCustomerId() { return customerId; }
-    public int getSatisfaction() { return satisfaction; }
     public CustomerState getState() { return state; }
+    /*
+     * returns a string that indicates a state "in progress" / "pending"
+     */
+    public final String getStateFull() { 
+    	return state != CustomerState.PENDING ? state.toString() : String.format("%s-%s", pendingTransition.toString(), state.toString());
+    }
+    
+    		public int getCustomerId() { return customerId; }
+    public int getSatisfaction() { return satisfaction; }
     public int getTableId() { return tableId; }
     public String getMenuItemName() { return menuItemName; }
     public int getLockedPriceCents() { return lockedPriceCents; }
