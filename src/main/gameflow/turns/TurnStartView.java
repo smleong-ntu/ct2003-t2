@@ -15,6 +15,7 @@ public class TurnStartView extends TurnView {
 	
 	//can retrieve all customers and their order status here
 	private List<Customer> queue = new ArrayList<>();
+	private String queueDisplay;
 	
 	//Staff tasks???
 	//Just list all options?
@@ -33,11 +34,7 @@ public class TurnStartView extends TurnView {
 	}
 		
 	private void displayQueue() {
-		System.out.printf("Queue: ");		
-		queue.forEach(customer -> {
-			System.out.printf("[%s %d], ", customer.getClass().getSimpleName(), customer.getCustomerId());		
-		});
-		System.out.println("-");		
+		System.out.println(queueDisplay);	
 	}
 	
 	private void displayOccupiedTables() {
@@ -104,7 +101,7 @@ public class TurnStartView extends TurnView {
 			case OnRestaurant.QueueUpdated onQueueUpdated -> {
 				//Ensures snapshot copy instead
 				queue = List.copyOf(onQueueUpdated.waitingQueue().getCustomers());
-				displayQueue();
+				queueDisplay = onQueueUpdated.waitingQueue().toString();
 			}
 			default -> {}
 		}

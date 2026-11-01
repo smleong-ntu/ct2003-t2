@@ -38,13 +38,13 @@ public class Restaurant implements GameSubject{
     private final List<Integer> paidSatisfactions = new ArrayList<>();   // recorded at payment time
     private int revenueCents;
     
-  //placeholder staff list, this should come from restaurant
   	private Map<Class<? extends Staff>, List<Staff>> staffList = new HashMap<>();
     
     /*
      * Listeners for GameSubject
      */
     private List<GameEventListener> listeners = new ArrayList<>();
+    private RestaurantView view;
 
     /** Creates a restaurant with the given number of tables, an empty queue, the base menu and $0. */
     public Restaurant(int tableCount) {
@@ -59,6 +59,9 @@ public class Restaurant implements GameSubject{
         this.waitingQueue = new WaitingQueue();
         this.menu = new Menu();
         this.revenueCents = 0;
+        
+        this.view = new RestaurantView();
+        subscribe(view);
     }
     
     /**
@@ -435,6 +438,8 @@ public class Restaurant implements GameSubject{
      */
     public void subscribe(GameEventListener listener) {
     	listeners.add(listener);
+    	listener.onEvent(new OnRestaurant.QueueUpdated(waitingQueue));
+    	//add more here to update listeners on subscription but ignore if dont need
     }
     
     public void unsubscribe(GameEventListener listener) {
