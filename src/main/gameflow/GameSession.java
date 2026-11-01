@@ -10,6 +10,7 @@ public class GameSession implements GameEventListener{
 	
 	private static GameSession session;
 	private static GameData data;
+	private static int seed;
 	
 	private GameObjective objective;
 	private TurnManager turnManager;
@@ -24,11 +25,14 @@ public class GameSession implements GameEventListener{
 		System.out.println("New session created!");
 		
 		session = this;
+		
 		initialize(dataSetting, objectiveSetting);
 		startSession();
 	}
 	
-	public static GameSession Create (GameData.Setting dataSetting, GameObjective.Setting objectiveSetting) {
+	public static GameSession Create (GameData.Setting dataSetting, GameObjective.Setting objectiveSetting, int seed) {
+		
+		GameSession.seed = seed;
 		
 		if (session == null) {
 			session = new GameSession(dataSetting, objectiveSetting);
@@ -97,6 +101,7 @@ public class GameSession implements GameEventListener{
 
 	public static GameData data() { return data; }
 	public static GameSession session() { return session; }
+	public final static int seed() { return seed; }
 	
 	public final Restaurant restaurant() { return restaurant; }
 	public TaskManager placeholderTaskManager() { return placeholderTaskManager; }

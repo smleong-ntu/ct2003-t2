@@ -21,7 +21,7 @@ public class ArrivalStep extends TurnStep {
 	public void execute() {
 		
 		//Customer id is set as turn number, could be anything really
-		Customer customer = GameSession.data().arrivals().get(turn).apply(turn);
+		Customer customer = GameSession.data().arrivals().get(turn).apply(GameSession.seed() + (turn * 31));
 		
 		if (customer == null) {
 			System.out.println("N/A");
