@@ -59,25 +59,30 @@ public class Customer {
         return true;
     }
 
+    //REVIEW: Intermediate state to decouple from turns
     /** Waiter must check the real Order is READY before calling this method. */
     public boolean receiveOrder(int turn) {
         if (state != CustomerState.WAITING_FOR_FOOD || turn < 1) {
             return false;
         }
         servedTurn = turn;
-        state = CustomerState.EATING;
+        
+        //Whenever need to go to transition state, will need to call state to pending
+        state = CustomerState.PENDING;
+        pendingTransition = CustomerState.EATING;
+        
         return true;
     }
 
   //REVIEW: Intermediate state to decouple from turns
     /** Dining step: a customer cannot finish eating on the serving turn. */
     public void finishEating(int turn) {
-        if (state == CustomerState.EATING && turn > servedTurn) {
+        if (state == CustomerState.EATING/* && turn > servedTurn*/) {
         	
         	//By using a intermediate state, tasks can validate 
         	//if this customer is able to pay or not independent of turn
         	//can change the name of state if needed
-        	state = CustomerState.COMPLETED;
+        	state = CustomerState.PENDING;
         	
         	//transition to this state automatically in the next turn
         	pendingTransition = CustomerState.READY_TO_PAY; //
@@ -90,7 +95,7 @@ public class Customer {
     /** A newly ready customer must wait until the following turn to pay. */
     public boolean canPay(int turn) {
     	//REVIEW: Decouple state and turns
-    	return state == CustomerState.READY_TO_PAY;
+    	return state == CustomerState.READY_TO_PAY/* && turn > readyToPayTurn*/;
         //return state == CustomerState.READY_TO_PAY && turn > readyToPayTurn;
     }
 
