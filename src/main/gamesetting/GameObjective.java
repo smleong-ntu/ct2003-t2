@@ -53,20 +53,37 @@ public class GameObjective implements GameEventListener {
 			case OnRestaurant.PaymentReceived onPayment -> {
 				tracked.revenue = onPayment.revenue();
 				tracked.paidCustomers = onPayment.paidCustomerCount();
-				if (checkCompletionTarget()) { onCompleted(); }
+				updateCompletionStatus();
 			}
 			
 			case OnRestaurant.SatisfactionUpdated onSatisfactionUpdated -> {
 				tracked.satisfaction = (float)onSatisfactionUpdated.satisfaction();
-				if (checkCompletionTarget()) { onCompleted(); }
+				updateCompletionStatus();
 			}
 			
-			default -> {
-				//System.out.println("payload none: generic event");
-			}
+			default -> {}
 		}
 	}
 	
+	/*
+	 * Determines if there is a change in completion status, then calls the methods as needed
+	 */
+	private void updateCompletionStatus() {
+		
+		boolean isReachTarget = checkCompletionTarget();
+		
+		if (isReachTarget != isCompleted) {
+	        if (isReachTarget) {
+	            onCompleted();
+	        } else {
+	            onClearCompletion();
+	        }
+	    }
+	}
+	
+	/*
+	 * Purely checks if the targets have been met, does not change isCompleted
+	 */
 	private boolean checkCompletionTarget() {
 		
 		if (tracked.revenue < revenue) {
@@ -86,7 +103,13 @@ public class GameObjective implements GameEventListener {
 	
 	private void onCompleted() {
 		//can be a broadcast if needed, but use for display now
-		System.out.printf("Objective [%s] is completed%n", name);
+		//System.out.printf("Objective [%s] is completed%n", name);
+		isCompleted = true;
+	}
+	
+	private void onClearCompletion() {
+		//can be a broadcast if needed, but use for display now
+		isCompleted = false;
 	}
 	
 	public boolean isCompleted() { return isCompleted; }
