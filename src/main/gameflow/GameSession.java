@@ -62,6 +62,9 @@ public class GameSession implements GameEventListener{
 		turnManager.subscribe(turnEndView);
 		turnManager.subscribe(turnStartView);
 		turnManager.subscribe(this);
+		
+		turnManager.onTurnStart(restaurant::start);
+		turnManager.onTurnEnd(restaurant::end);
 	}
 	
 	//starts different components after linking and creation

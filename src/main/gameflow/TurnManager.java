@@ -14,7 +14,10 @@ public class TurnManager {
 	private int currentStep = -1;
 	
 	private List<TurnStep> steps = new ArrayList<>();
-	private List<GameEventListener> listeners = new ArrayList<GameEventListener>();
+	private List<GameEventListener> listeners = new ArrayList<>();
+	
+	private List<Runnable> turnStartHandles = new ArrayList<>();
+	private List<Runnable> turnEndHandles = new ArrayList<>();
 		
 	public TurnManager(GameData setting) {
 		MAX_TURN = setting.turns();
@@ -44,11 +47,21 @@ public class TurnManager {
 		listeners.remove(listener);
 	}
 	
+	//Function binding for events instead of listening
+	public void onTurnStart(Runnable bindFunction) {
+		turnStartHandles.add(bindFunction);
+	}
+	
+	public void onTurnEnd(Runnable bindFunction) {
+		turnEndHandles.add(bindFunction);
+	}
+	
 	//TURN METHODS INTERNAL
 	//starts a fresh turn
 	private void start() {
 		//System.out.printf("TURN [%d/%d]%n", currentTurn, MAX_TURN);
 		notify(new OnTurn.Start(currentTurn));
+		notify(turnStartHandles);
 		
 		//Update turns for all steps, then execute nextStep (-1 -> 0)
 		steps.forEach(step -> step.setTurn(currentTurn));
@@ -63,6 +76,7 @@ public class TurnManager {
 		if (currentStep > steps.size() - 1) 
 		{
 			notify(new OnTurn.End(currentTurn));
+			notify(turnEndHandles);
 			complete();
 			return;
 		}
@@ -96,6 +110,12 @@ public class TurnManager {
 	private void notify(GameEvent event) {
 		for (GameEventListener listener : listeners) {
 			listener.onEvent(event);
+		}
+	}
+	
+	private void notify(List<Runnable> binds) {
+		for (Runnable bind : binds) {
+			bind.run();
 		}
 	}
 }

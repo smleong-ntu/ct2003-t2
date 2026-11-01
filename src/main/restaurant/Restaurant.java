@@ -347,7 +347,8 @@ public class Restaurant implements GameSubject{
         		getAveragePaidSatisfaction().getAsDouble() : 0.f
         		));
     }
-
+    
+    //REVIEW: Why is the restaurant applying this in the first place? what is the role of the restaurant?
     /**
      * Applies the end-of-turn waiting loss to every queued or seated customer who has not been
      * served, and cleans up after anyone who leaves. Returns the customers who left.
@@ -402,6 +403,8 @@ public class Restaurant implements GameSubject{
     public Map<Class<? extends Staff>, List<Staff>> getStaffList(){
     	return staffList;
     }
+    
+ // ------------------------------------------------------------------ broadcasts and listeners
     /*
      * GameSubject interface to record and notify listeners
      */
@@ -417,5 +420,15 @@ public class Restaurant implements GameSubject{
     	for (GameEventListener listener : listeners) {
     		listener.onEvent(e);
     	}
+    }
+    
+    public void start() {
+    	customers.forEach(customer -> {
+    		customer.tick();
+    	});
+    }
+    
+    public void end() {
+    	
     }
 }

@@ -19,6 +19,8 @@ public class Customer {
     private int readyToPayTurn = -1;
     private boolean orderCancelled;
 
+    private CustomerState pendingTransition = null;
+    
     public Customer(int customerId) {
         if (customerId < 1) {
             throw new IllegalArgumentException("Customer ID must be positive.");
@@ -67,17 +69,29 @@ public class Customer {
         return true;
     }
 
+  //REVIEW: Intermediate state to decouple from turns
     /** Dining step: a customer cannot finish eating on the serving turn. */
     public void finishEating(int turn) {
         if (state == CustomerState.EATING && turn > servedTurn) {
-            readyToPayTurn = turn;
-            state = CustomerState.READY_TO_PAY;
+        	
+        	//By using a intermediate state, tasks can validate 
+        	//if this customer is able to pay or not independent of turn
+        	//can change the name of state if needed
+        	state = CustomerState.COMPLETED;
+        	
+        	//transition to this state automatically in the next turn
+        	pendingTransition = CustomerState.READY_TO_PAY; //
+        	
+        	//readyToPayTurn = turn;
+        	//state = CustomerState.READY_TO_PAY;
         }
     }
 
     /** A newly ready customer must wait until the following turn to pay. */
     public boolean canPay(int turn) {
-        return state == CustomerState.READY_TO_PAY && turn > readyToPayTurn;
+    	//REVIEW: Decouple state and turns
+    	return state == CustomerState.READY_TO_PAY;
+        //return state == CustomerState.READY_TO_PAY && turn > readyToPayTurn;
     }
 
     /** Called by Cashier after checking canPay(turn). */
@@ -90,7 +104,26 @@ public class Customer {
         // Integration: Restaurant must also mark the real Order PAID,
         // free the real Table and record satisfaction at payment time.
     }
-
+    
+    //REVIEW: Represents a "turn" that has passed
+    //Added this to allow transitions to new states when a new turn begins
+    //Equivalent to "startTurn", rename if desired
+    public void tick() {
+    	//skip this since customer no longer part of turn order
+    	if (state == CustomerState.LEFT) {
+    		return; 
+    	}
+    	
+    	if (pendingTransition != null) {
+    		state = pendingTransition;
+    		System.out.printf("Transition customer [%d] -> [%s]%n", customerId, state.toString());
+    		pendingTransition = null;
+    		return;
+    	}
+    	
+    	System.out.printf("No transition pending for customer [%d]%n", customerId);
+    }
+    
     /** Applies Stage 1 waiting loss once at the end of each game turn. */
     public void endTurn() {
         if (isWaitingForService()) {
