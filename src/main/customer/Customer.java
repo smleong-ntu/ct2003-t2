@@ -2,6 +2,7 @@ package main.customer;
 
 import java.util.List;
 import main.menu.*;
+import main.order.*;
 
 /**
  * A Stage 1 regular customer. Rules stay here rather than in the user interface.
@@ -46,26 +47,28 @@ public class Customer {
         }
         return menu.getAllItems().get((customerId - 1) % menu.getAllItems().size());
     }
-
+    
+    //REVIEW: input param as order to contain the details if desired
     /** Called when the Waiter records this customer's chosen item and price. */
-    public boolean placeOrder(String itemName, int priceCents) {
-        if (state != CustomerState.SEATED || itemName == null
-                || itemName.isBlank() || priceCents < 0) {
+    public boolean placeOrder(Order order /*String itemName, int priceCents*/) {
+        if (state != CustomerState.SEATED/* || itemName == null
+                || itemName.isBlank() || priceCents < 0*/) {
             return false;
         }
-        menuItemName = itemName;
-        lockedPriceCents = priceCents;
+        menuItemName = order.getMenuItem().getName();
+        lockedPriceCents = order.getLockedPriceCents();
         state = CustomerState.WAITING_FOR_FOOD;
         return true;
     }
 
     //REVIEW: Intermediate state to decouple from turns
     /** Waiter must check the real Order is READY before calling this method. */
-    public boolean receiveOrder(int turn) {
-        if (state != CustomerState.WAITING_FOR_FOOD || turn < 1) {
+    public boolean receiveOrder(/*int turn*/) {
+        if (state != CustomerState.WAITING_FOR_FOOD/* || turn < 1*/) {
             return false;
         }
-        servedTurn = turn;
+        
+        //servedTurn = turn;
         
         //Whenever need to go to transition state, will need to call state to pending
         state = CustomerState.PENDING;
@@ -167,7 +170,7 @@ public class Customer {
     public int getTableId() { return tableId; }
     public String getMenuItemName() { return menuItemName; }
     public int getLockedPriceCents() { return lockedPriceCents; }
-    public int getServedTurn() { return servedTurn; }
+    //public int getServedTurn() { return servedTurn; }
     public int getReadyToPayTurn() { return readyToPayTurn; }
     public boolean isOrderCancelled() { return orderCancelled; }
 }

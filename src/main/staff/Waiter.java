@@ -124,7 +124,7 @@ public class Waiter extends Staff {
      * Returns the new Order object.
      * Returns null if order creation fails.
      */
-    public Order takeOrder(
+    public boolean takeOrder(
             Restaurant restaurant,
             Customer customer,
             MenuItem item,
@@ -134,19 +134,23 @@ public class Waiter extends Staff {
                 || customer == null
                 || item == null) {
 
-            return null;
+            return false;
         }
 
         try {
 
-            return restaurant.placeOrder(
+            Order order = restaurant.placeOrder(
                     customer,
                     item,
                     turn);
+            
+            customer.placeOrder(order);
+            
+            return true;
 
         } catch (Exception e) {
 
-            return null;
+            return false;
         }
     }
 
@@ -162,8 +166,7 @@ public class Waiter extends Staff {
      * Returns true if serving succeeds.
      * Returns false if the order is invalid.
      */
-    public boolean serveOrder(
-            Order order) {
+    public boolean serveOrder(Order order, Customer customer) {
 
         if (order == null) {
 
@@ -173,6 +176,7 @@ public class Waiter extends Staff {
         try {
 
             order.markServed();
+            customer.receiveOrder();
 
             return true;
 
