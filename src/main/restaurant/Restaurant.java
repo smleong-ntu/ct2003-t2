@@ -84,6 +84,22 @@ public class Restaurant implements GameSubject{
 			}
 		});
     }
+    
+    // ------------------------------------------------------------------ boundary tasks
+    private void enter(Customer c) {
+    	customers.add(c);
+        waitingQueue.enqueue(c);
+    }
+    
+    private void exit(Customer c, boolean isProperDeparture) {
+    	if (isProperDeparture) {
+    		//handle something here if needed
+    	}
+    	
+    	else {
+    		recordDeparture(c);
+    	}
+    }
 
     // ------------------------------------------------------------------ arrivals
 
@@ -104,8 +120,11 @@ public class Restaurant implements GameSubject{
             throw new IllegalStateException(
                     "A new arrival must be queuing, but this customer is " + c.getState());
         }
-        customers.add(c);
-        waitingQueue.enqueue(c);
+        
+        //Bind functions and call the customer to "queue", this invokes the enter Boundary task
+        c.onEnterRestaurant(this::enter);
+        c.onExitRestaurant(this::exit);
+        c.queue();
     }
 
     // ------------------------------------------------------------------ tables
@@ -422,6 +441,9 @@ public class Restaurant implements GameSubject{
     	}
     }
     
+    /*
+     * Forwarding events from TurnManager in sequential execution
+     */
     public void start() {
     	customers.forEach(customer -> {
     		customer.tick();
@@ -429,6 +451,8 @@ public class Restaurant implements GameSubject{
     }
     
     public void end() {
-    	
+    	customers.forEach(customer -> {
+    		customer.endTurn();
+    	});
     }
 }

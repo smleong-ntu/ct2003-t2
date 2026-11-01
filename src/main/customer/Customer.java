@@ -1,6 +1,9 @@
 package main.customer;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.BiConsumer;
+import main.restaurant.*;
 import main.menu.*;
 import main.order.*;
 
@@ -16,10 +19,12 @@ public class Customer {
     private int tableId = -1;
     private String menuItemName;
     private int lockedPriceCents;
-    private int servedTurn = -1;
+    //private int servedTurn = -1;
     private int readyToPayTurn = -1;
     private boolean orderCancelled;
-
+    
+    private Consumer<Customer> enterHandle;
+    private BiConsumer<Customer, Boolean> exitHandle;
     private CustomerState pendingTransition = null;
     
     public Customer(int customerId) {
@@ -28,7 +33,15 @@ public class Customer {
         }
         this.customerId = customerId;
     }
-
+    
+    //REVIEW: Initializes customer for queuing
+    //Dependency injection and initialization upon queuing
+    //Customer enterHandle already binded before queue() is called
+    public void queue() {
+    	enterHandle.accept(this);
+    	state = CustomerState.QUEUING;
+    }
+    
     /** Called by seating logic only after it has reserved a free table. */
     public boolean seatAtTable(int tableId) {
         if (state != CustomerState.QUEUING || tableId < 1) {
@@ -139,6 +152,13 @@ public class Customer {
             if (satisfaction == 0) {
                 leaveUnpaid();
             }
+            return;
+        }
+        
+        //Exit restaurant with much grace (:
+        if (state == CustomerState.PAID) {
+        	exitHandle.accept(this, true);
+        	disposeHandles();
         }
     }
 
@@ -155,8 +175,22 @@ public class Customer {
         orderCancelled = menuItemName != null;
         tableId = -1;
         state = CustomerState.LEFT;
+        
+        //Exit restaurant with no grace ):
+        exitHandle.accept(this, false);
+        disposeHandles();
         // Integration: Restaurant.handleDeparture must cancel the real Order,
         // release the real Table and remove this customer from the queue.
+    }
+    
+    //REVIEW: Binded events
+    public void onEnterRestaurant(Consumer<Customer> handler) { enterHandle = handler;}
+    public void onExitRestaurant(BiConsumer<Customer, Boolean> handler) { exitHandle = handler; }
+    
+    //REVIEW: Clean up binded event associations since customer has left
+    private void disposeHandles() {
+    	enterHandle = null;
+    	exitHandle = null;
     }
 
     private boolean isWaitingForService() {
@@ -171,6 +205,6 @@ public class Customer {
     public String getMenuItemName() { return menuItemName; }
     public int getLockedPriceCents() { return lockedPriceCents; }
     //public int getServedTurn() { return servedTurn; }
-    public int getReadyToPayTurn() { return readyToPayTurn; }
+    public int getReadyToPayTurn() { return readyToPayTurn; } //BUG: since i removed turn, how can we enforce cashier's checks?
     public boolean isOrderCancelled() { return orderCancelled; }
 }
