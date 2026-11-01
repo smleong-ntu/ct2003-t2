@@ -166,7 +166,7 @@ public class Waiter extends Staff {
      * Returns true if serving succeeds.
      * Returns false if the order is invalid.
      */
-    public boolean serveOrder(Order order, Customer customer) {
+    public boolean serveOrder(Order order) {
 
         if (order == null) {
 
@@ -176,7 +176,7 @@ public class Waiter extends Staff {
         try {
 
             order.markServed();
-            customer.receiveOrder();
+            order.getOwner().receiveOrder();
 
             return true;
 
