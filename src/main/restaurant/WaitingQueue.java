@@ -82,14 +82,16 @@ public class WaitingQueue {
         return customers.isEmpty();
     }
     
+    /** The display line for the queue, oldest first, e.g. "Queue: [Customer 1],[Customer 2]". */
+    @Override
     public String toString() {
-    	
+
     	StringBuilder queueDisplay = new StringBuilder("Queue: ");
-    	
+
     	for (int i = 0; i < customers.size(); i++) {
     		queueDisplay.append(String.format("[%s %d]", customers.get(i).getClass().getSimpleName(), customers.get(i).getCustomerId()));
-    		
-    		if (++i < customers.size()) {
+
+    		if (i + 1 < customers.size()) {
     			queueDisplay.append(",");
     		}
     	}
