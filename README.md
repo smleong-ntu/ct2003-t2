@@ -6,6 +6,24 @@ LIM HUIXIN VIVIAN
 LOH CHEE JUN
 ```
 
+## Build and Run Instructions
+
+### Prerequisites
+* Java Development Kit (JDK) 25 or higher installed.
+* Java binary directory added to your system's PATH environment variable.
+
+### How to Build
+Open a terminal or command prompt in the root directory of the project and compile the source code by running:
+```bash
+javac src/*.java -d bin
+```
+
+### How to Run
+Once compiled, execute the application from the project root using the following command:
+```bash
+java -cp bin main.gameflow.RestaurantRushApp
+```
+
 Visit [Report][spec] for object diagrams for reference
 Request permissions from [smleong-ntu][profile] if not visible
 
