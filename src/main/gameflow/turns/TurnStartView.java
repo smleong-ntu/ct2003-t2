@@ -83,7 +83,7 @@ public class TurnStartView extends TurnView {
 		validateOrder.ifPresentOrElse(
 			//Present
 			order -> {
-				System.out.printf("Order: %s%n", order.getStatus()); 
+				System.out.printf("Order: %s%n", order.toString()); 
 			},
 			
 			//Or else
