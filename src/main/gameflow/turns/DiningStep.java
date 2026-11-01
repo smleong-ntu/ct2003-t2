@@ -44,7 +44,7 @@ public class DiningStep extends TurnStep{
 					break;
 				}
 				
-				System.out.printf("Invalid task: %s%n", reason.toString());
+				System.out.printf("Invalid: %s%n", reason.toString());
 			}
 			
 			

@@ -39,7 +39,7 @@ public class PrepareOrderTask extends ChefTask {
 		int validOrders = GameSession.session().restaurant().getOrdersInKitchen().size() + pendingOrders;
 		
 		if (validOrders == 0) {
-			reason.append("Invalid Task: No available orders can be prepared in kitchen");
+			reason.append(String.format(">>%s<< No available orders can be prepared in kitchen", name));
 			return false;
 		}
 		

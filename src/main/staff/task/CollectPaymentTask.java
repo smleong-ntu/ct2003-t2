@@ -38,7 +38,7 @@ public class CollectPaymentTask extends CashierTask{
 			}
 		}
 		
-		reason.append(String.format("No paying customers available >>%s<<", name));
+		reason.append(String.format(">>%s<< No paying customers available ", name));
 		return false;
 	}
 	

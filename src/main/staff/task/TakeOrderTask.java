@@ -40,7 +40,7 @@ public class TakeOrderTask extends WaiterTask {
 		List<Table> occupiedTables = GameSession.session().restaurant().getOccupiedTables();
 		
 		if (occupiedTables.size() == 0) {
-			reason.append("Invalid Task: No table is occupied for an order to be taken");
+			reason.append(String.format(">>%s<< No table is occupied for an order to be taken", name));
 			return false;
 		}
 		
@@ -53,7 +53,7 @@ public class TakeOrderTask extends WaiterTask {
 		}
 		
 		//All customers in occupied tables have already been served
-		reason.append("Invalid Task: All customers seated at tables have been served");
+		reason.append(String.format(">>%s<<  All customers seated at tables have been served", name));
 		return false;
 	}
 	

@@ -30,14 +30,14 @@ public class SeatTask extends WaiterTask{
 		
 		if (GameSession.session().restaurant().getWaitingQueue().size() == 0) {
 			
-			reason.append("Invalid Task: No customer to seat");
+			reason.append(String.format(">>%s<< No customer to seat",name));
 			return false;
 		}
 		
 		//If there is a customer, without table, cannot seat customer
 		if (GameSession.session().restaurant().getFreeTables().size() == 0) {
 			
-			reason.append("Invalid Task: No free tables to seat customer");
+			reason.append(String.format(">>%s<< No free tables to seat customer", name));
 			return false;
 		}
 		

@@ -108,7 +108,7 @@ public class ManagerStep extends TurnStep {
 			//System.out.printf("Selected [%d]%n", selection + 1);
 			
 			if (!isValidChoice) {
-				System.out.printf("%s. Try another choice%n", reason.toString()); //need show reason for task invalid
+				System.out.printf("Invalid: %s. Try another choice%n", reason.toString()); //need show reason for task invalid
 			}
 			
 		} while (!isValidChoice);

@@ -28,7 +28,7 @@ public class ServeOrderTask extends WaiterTask{
 	public boolean isTaskValid(StringBuilder reason, List<Task> taskQueue) {
 		
 		if (GameSession.session().restaurant().getReadyOrders().size() == 0) {
-			reason.append("Invalid Task: No ready orders to serve");
+			reason.append(String.format(">>%s<< No ready orders to serve", name));
 			return false;
 		}
 		
