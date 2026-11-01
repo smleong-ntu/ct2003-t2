@@ -150,7 +150,7 @@ public class Customer {
     /** Applies Stage 1 waiting loss once at the end of each game turn. */
     public void endTurn() {
         if (isWaitingForService()) {
-            updateSatisfaction(-8);
+            updateSatisfaction(-getWaitingLoss());
             if (satisfaction == 0) {
                 leaveUnpaid();
             }
@@ -171,7 +171,7 @@ public class Customer {
     public void updateSatisfaction(int change) {
         satisfaction = (int) Math.max(0L, Math.min(100L, (long) satisfaction + change));
     }
-
+    
     /** Removes an unserved customer; actual Order/Table cleanup is pending. */
     public void leaveUnpaid() {
         if (!isWaitingForService()) {
@@ -214,7 +214,7 @@ public class Customer {
     	return state != CustomerState.PENDING ? state.toString() : String.format("%s-%s", pendingTransition.toString(), state.toString());
     }
     
-    		public int getCustomerId() { return customerId; }
+    public int getCustomerId() { return customerId; }
     public int getSatisfaction() { return satisfaction; }
     public int getTableId() { return tableId; }
     public String getMenuItemName() { return menuItemName; }
@@ -222,4 +222,6 @@ public class Customer {
     //public int getServedTurn() { return servedTurn; }
     public int getReadyToPayTurn() { return readyToPayTurn; } //BUG: since i removed turn, how can we enforce cashier's checks?
     public boolean isOrderCancelled() { return orderCancelled; }
+    public int getWaitingLoss() { return 8; }
+    public int adjustBill(int cents) { return cents; }
 }
