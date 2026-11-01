@@ -38,7 +38,11 @@ public class Customer {
     //Dependency injection and initialization upon queuing
     //Customer enterHandle already binded before queue() is called
     public void queue() {
-    	enterHandle.accept(this);
+    	
+    	if (enterHandle != null) {
+    		enterHandle.accept(this);    		
+    	}
+    	
     	state = CustomerState.QUEUING;
     }
     
@@ -157,7 +161,10 @@ public class Customer {
         
         //Exit restaurant with much grace (:
         if (state == CustomerState.PAID) {
-        	exitHandle.accept(this, true);
+        	
+        	if (exitHandle != null) {
+        		exitHandle.accept(this, true);
+        	}
         	disposeHandles();
         }
     }
@@ -177,8 +184,11 @@ public class Customer {
         state = CustomerState.LEFT;
         
         //Exit restaurant with no grace ):
-        exitHandle.accept(this, false);
+        if (exitHandle != null) {
+        	exitHandle.accept(this, false);
+        }
         disposeHandles();
+        
         // Integration: Restaurant.handleDeparture must cancel the real Order,
         // release the real Table and remove this customer from the queue.
     }
