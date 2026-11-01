@@ -6,7 +6,7 @@ public class RestaurantRushApp {
 
 	public static void main(String[] args) {
 		// if we input data configs here, a session can be created
-		GameSession.Create(GameDataType.DEFAULTS, GameObjectiveType.DEFAULTS, 59); 
+		GameSession.Create(GameDataType.DEFAULTS, GameObjectiveType.DEFAULTS, 0); 
 	}
 
 }

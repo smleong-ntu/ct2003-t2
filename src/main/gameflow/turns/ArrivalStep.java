@@ -6,6 +6,7 @@ import main.restaurant.*;
 
 public class ArrivalStep extends TurnStep {
 	
+	private int count = 1;
 	private Restaurant restaurant;
 	
 	@Override
@@ -21,7 +22,7 @@ public class ArrivalStep extends TurnStep {
 	public void execute() {
 		
 		//Customer id is set as turn number, could be anything really
-		Customer customer = GameSession.data().arrivals().get(turn).apply(GameSession.seed() + (turn * 31));
+		Customer customer = GameSession.data().arrivals().get(turn).apply(GameSession.seed() + count);
 		
 		if (customer == null) {
 			System.out.println("N/A");
@@ -32,6 +33,7 @@ public class ArrivalStep extends TurnStep {
 			
 			//Push to restaurant queue
 			restaurant.addArrival(customer);
+			count ++;
 		}
 
 		postExecuteAction();
