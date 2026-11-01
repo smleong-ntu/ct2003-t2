@@ -48,6 +48,7 @@ public class ManagerStep extends TurnStep {
 		Task selectedTask = selectTask(tasks);
 		
 		if (selectedTask != null) {
+			selectTarget(selectedTask);
 			GameSession.session().placeholderTaskManager().queue(selectedTask);
 		}
 	}
@@ -114,5 +115,37 @@ public class ManagerStep extends TurnStep {
 		} while (!isValidChoice);
 		
 		return tasks.get(selection);
+	}
+	
+	//Asks which customer or order the task acts on, when there is more than one
+	private void selectTarget(Task task) {
+		//Not all tasks need to see the queue, but those that do require this param
+		List<String> targets = task.targets(GameSession.session().placeholderTaskManager().getQueuedTasks());
+		task.setTarget(0);
+
+		if (targets.size() < 2) {
+			return;
+		}
+
+		for (int i = 0; i < targets.size(); i++) {
+			System.out.printf("[%d] %s%n", i + 1, targets.get(i));
+		}
+		System.out.printf("Who should %s act on? (1-%d)%n", task.taskName(), targets.size());
+
+		while (true) {
+			try {
+				int choice = input.nextInt();
+
+				if (choice >= 1 && choice <= targets.size()) {
+					task.setTarget(choice - 1);
+					return;
+				}
+			}
+			catch (InputMismatchException e) {
+				input.nextLine();
+			}
+
+			System.out.printf("Invalid: enter a number between 1-%d%n", targets.size());
+		}
 	}
 }

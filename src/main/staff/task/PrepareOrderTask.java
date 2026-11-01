@@ -1,12 +1,11 @@
 package main.staff.task;
 
 import java.util.List;
-
+import java.util.ArrayList;
 import main.gameflow.GameSession;
 import main.restaurant.*;
 import main.order.*;
 import main.staff.Chef;
-import main.staff.task.Task.Pending;
 
 public class PrepareOrderTask extends ChefTask {
 	
@@ -18,12 +17,8 @@ public class PrepareOrderTask extends ChefTask {
 	public void execute(int turn) {
 		super.execute(turn);
 		
-		Restaurant restaurant = GameSession.session().restaurant();
-		Order order = chef.findOrderToPrepare(restaurant.getOrdersInKitchen());
-		
-		if (order != null) {
-			chef.prepareOrder(order);			
-		}
+		Restaurant restaurant = GameSession.session().restaurant();		
+		chef.prepareOrder(restaurant.getOrdersInKitchen().get(target));
 	}
 	
 	@Override
@@ -45,6 +40,24 @@ public class PrepareOrderTask extends ChefTask {
 		
 		//There is at least one order that is PLACED or IN_PREPARATION or pending to be created
 		return true;
+	}
+	
+	@Override
+	public List<String> targets(List<Task> taskQueue) {
+		List<String> targets = new ArrayList<>();
+
+		GameSession.session().restaurant().getOrdersInKitchen().forEach(o -> {
+			targets.add(String.format("Customer %d: %s", o.getOwner().getCustomerId(), o));
+		});
+
+		//A new order joins the end of the kitchen list when the Waiter acts, so its index still works
+		for (Task t : taskQueue) {
+			if (t.getPendingInfo().contains(Pending.ORDER)) {
+				targets.add("The order being taken this turn");
+			}
+		}
+
+		return targets;
 	}
 	
 	@Override

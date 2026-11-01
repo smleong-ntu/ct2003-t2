@@ -17,11 +17,7 @@ public class ServeOrderTask extends WaiterTask{
 	public void execute(int turn) {
 		super.execute(turn);
 		
-		Order order = waiter.findReadyOrder();
-		
-		if (order != null) {
-			waiter.serveOrder(order);			
-		}
+		waiter.serveOrder(GameSession.session().restaurant().getReadyOrders().get(target));
 	}
 	
 	@Override
@@ -34,6 +30,13 @@ public class ServeOrderTask extends WaiterTask{
 		
 		//At least one order in READY state
 		return true;
+	}
+	
+	@Override
+	public List<String> targets(List<Task> taskQueue) {
+		return GameSession.session().restaurant().getReadyOrders().stream()
+				.map(o -> String.format("Customer %d: %s", o.getOwner().getCustomerId(), o))
+				.toList();
 	}
 	
 	@Override

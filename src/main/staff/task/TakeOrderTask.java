@@ -16,22 +16,8 @@ public class TakeOrderTask extends WaiterTask {
 		super.execute(turn);
 		
 		Restaurant restaurant = GameSession.session().restaurant();
-		List<Table> occupiedTables = restaurant.getOccupiedTables();
-		
-		Customer customer = null;
-		for (int i = 0; i < occupiedTables.size(); i++) {
-			
-			//At least one customer is in seated state - ready for order to be taken
-			if (occupiedTables.get(i).getOccupant().getState() == CustomerState.SEATED) {
-				customer = occupiedTables.get(i).getOccupant();
-				break;
-			}
-		}
-
-		//Take order
-		if (customer != null) {
-			waiter.takeOrder(restaurant, customer, customer.chooseMenuItem(restaurant.getMenu()), turn);			
-		}
+		Customer customer = seatedCustomers().get(target);
+		waiter.takeOrder(restaurant, customer, customer.chooseMenuItem(restaurant.getMenu()), turn);
 	}
 	
 	@Override
@@ -58,8 +44,22 @@ public class TakeOrderTask extends WaiterTask {
 	}
 	
 	@Override
+	public List<String> targets(List<Task> taskQueue) {
+		return seatedCustomers().stream()
+				.map(c -> String.format("Customer %d", c.getCustomerId()))
+				.toList();
+	}
+	
+	@Override
 	protected void setPendingInfo() {
 		super.setPendingInfo();
 		pending.add(Pending.ORDER);
+	}
+	
+	private List<Customer> seatedCustomers() {
+		return GameSession.session().restaurant().getOccupiedTables().stream()
+				.map(Table::getOccupant)
+				.filter(c -> c.getState() == CustomerState.SEATED)
+				.toList();
 	}
 }

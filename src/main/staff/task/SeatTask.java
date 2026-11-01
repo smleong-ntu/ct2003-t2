@@ -20,7 +20,7 @@ public class SeatTask extends WaiterTask{
 		super.execute(turn);
 		
 		Restaurant restaurant = GameSession.session().restaurant();
-		Customer c = waiter.findWaitingCustomer();
+		Customer c = restaurant.getWaitingQueue().getCustomers().get(target);
 		Table t = waiter.findAvailableTable();
 		waiter.seatCustomer(restaurant, c, t);
 	}
@@ -43,6 +43,13 @@ public class SeatTask extends WaiterTask{
 		
 		//There is a customer in queue AND an available table
 		return true;
+	}
+
+	@Override
+	public List<String> targets(List<Task> taskQueue) {
+		return GameSession.session().restaurant().getWaitingQueue().getCustomers().stream()
+				.map(c -> String.format("Customer %d", c.getCustomerId()))
+				.toList();
 	}
 	
 	@Override

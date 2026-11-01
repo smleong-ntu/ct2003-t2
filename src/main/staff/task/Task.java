@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.EnumSet;
 
 public abstract class Task {
-		
+	
+	protected int target = 0; //index into targets(), set by the manager
+	
 	/*
 	 * Pending allocation of the following items
 	 * Item may not have been created, is currently vacant or has limited quantity / spots
@@ -32,7 +34,14 @@ public abstract class Task {
 		
 	/*this information can determine choices that was already set before current task*/
 	public boolean isTaskValid(StringBuilder reason, List<Task> taskQueue) { return true; }
-	public String taskName() { return name; }
+	
+	/*
+	 * What the manager can pick for this task, oldest first. Empty means there is nothing to pick.
+	 */
+	public List<String> targets(List<Task> taskQueue) { return List.of(); }
+	public void setTarget(int index) { target = index; }
+	
+	public final String taskName() { return name; }
 	
 	/*
 	 * Allows each task to set their own pending flags for future tasks to see in the same turn
