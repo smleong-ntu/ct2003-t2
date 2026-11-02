@@ -9,13 +9,16 @@ LOH CHEE JUN
 ## Build and Run Instructions
 
 ### Prerequisites
-* Java Development Kit (JDK) 25 or higher installed.
-* Java binary directory added to your system's PATH environment variable.
+* [Java Development Kit][jdk] (JDK) 25 or higher installed.
+* Java binary directory added to your system's [PATH environment variable][jdk-setup].
 
 ### How to Build
 Open a terminal or command prompt in the root directory of the project and compile the source code by running:
 ```bash
-javac src/*.java -d bin
+cd /d C:\Project_Folder_Location
+dir /s /b src\*.java > sources.txt
+javac -d bin @sources.txt
+del sources.txt
 ```
 
 ### How to Run
@@ -83,3 +86,5 @@ origin  https://github.com/smleong-ntu/ct2003-t2.git (push)
 [spec]: https://entuedu-my.sharepoint.com/:w:/r/personal/c260010_e_ntu_edu_sg/Documents/CT2004%20-%20Software%20Engineering/Specifications.docx?d=wd730d71b5d8048e4a4afa840136bc5c6&csf=1&web=1&e=73DPu9
 [ghconfig]: https://youtu.be/r8jQ9hVA2qs?si=aVXLdkI_udhQNqrS&t=186
 [profile]: https://github.com/smleong-ntu
+[jdk]: https://www.oracle.com/asean/java/technologies/downloads/#jdk25-windows
+[jdk-setup]: https://www.youtube.com/watch?v=jvhL10Fvj4s
