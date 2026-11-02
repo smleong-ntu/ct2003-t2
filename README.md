@@ -27,6 +27,26 @@ java -cp bin main.gameflow.RestaurantRushApp
 Visit [Report][spec] for object diagrams for reference
 Request permissions from [smleong-ntu][profile] if not visible
 
+## Food Rule
+Customers are numbered 1-6 in arrival order. Customer `id` orders menu item `(id - 1) % 3`, which gives Salad, Burger, Pasta, Salad, Burger, Pasta.
+
+## Test Notes
+Both runs were replayed at the `stage-1` tag (`2c37161`). If anything changes the prompts, the key lists need re-recording.
+
+| Result | Choices | Outcome |
+|---|---|---|
+| Victory | Waiter picks Serve, else Take Order, else Seat, else Wait. Chef picks Prepare, else Wait | 5 paid, $66.00, satisfaction 79.20 |
+| Defeat | Waiter and Chef both pick Wait every turn | 0 paid, $0.00, 2 unhappy departures |
+
+To replay them:
+
+```sh
+# Victory
+echo 1 2 2 1 3 2 1 2 2 1 3 2 1 2 2 1 4 1 3 2 1 2 2 1 3 2 1 2 2 1 3 2 1 2 2 1 | java -cp bin main.gameflow.RestaurantRushApp
+# Defeat
+echo 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
+```
+
 # GitHub Version Control
 > To keep things clean, let's keep our version control process simple
 1. Use command line interface for all processes
