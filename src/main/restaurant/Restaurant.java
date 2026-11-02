@@ -207,6 +207,7 @@ public class Restaurant implements GameSubject{
         if (!menu.getAllItems().contains(item)) {
             throw new IllegalArgumentException("\"" + item.getName() + "\" is not on the menu");
         }
+        // Step 2: the customer adjusts its own bill (VIP 10% off)
         int priceCents = c.adjustBill(item.getPriceCents());
         Order order = new Order(item, c, priceCents, turn);
         addOrder(order);
