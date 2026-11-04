@@ -21,7 +21,7 @@ import java.util.OptionalDouble;
 import java.util.function.Supplier;
 
 /**
- * Aggregate root: owns the tables, waiting queue, menu, orders, revenue and every
+ * Aggregate root: owns the tables, waiting queue, menu, Happy Hour, orders, revenue and every
  * customer who has arrived. Paid and departed customers are worked out from each
  * customer's own state rather than kept in separate lists.
  * <p>
@@ -34,6 +34,7 @@ public class Restaurant implements GameSubject{
     private final List<Table> tables;
     private final WaitingQueue waitingQueue;
     private final Menu menu;
+    private final HappyHour happyHour = new HappyHour();
     private final List<Order> orders = new ArrayList<>();
     private final List<Customer> customers = new ArrayList<>();   // every arrival, in arrival order
     private final List<Integer> paidSatisfactions = new ArrayList<>();   // recorded at payment time
@@ -209,9 +210,18 @@ public class Restaurant implements GameSubject{
         }
         // Step 2: the customer adjusts its own bill (VIP 10% off)
         int priceCents = c.adjustBill(item.getPriceCents());
+        // Step 3: Happy Hour, applied after the customer's own discount
+        if (happyHour.isActive(turn)) {
+            priceCents = happyHour.applyTo(priceCents);
+        }
         Order order = new Order(item, c, priceCents, turn);
         addOrder(order);
         return order;
+    }
+
+    /** The once-per-game Happy Hour policy; the manager activates it at the start of a turn. */
+    public HappyHour getHappyHour() {
+        return happyHour;
     }
 
     private void addOrder(Order order) {
@@ -376,6 +386,23 @@ public class Restaurant implements GameSubject{
         		));
     }
     
+    /**
+     * Call at the start of every turn. While Happy Hour is active, customers still waiting for
+     * a table or food recover 15 satisfaction (maximum 100). Does nothing otherwise.
+     */
+    public void applyHappyHourRecovery(int turn) {
+        if (!happyHour.isActive(turn)) {
+            return;
+        }
+        for (Customer c : customers) {
+            CustomerState state = c.getState();
+            if (state == CustomerState.QUEUING || state == CustomerState.SEATED
+                    || state == CustomerState.WAITING_FOR_FOOD) {
+                c.updateSatisfaction(HappyHour.RECOVERY_POINTS);
+            }
+        }
+    }
+
     /**
      * Records a customer leaving unhappy: cancels their unfinished order (if registered),
      * frees their table (if seated) and removes them from the waiting queue.
