@@ -4,7 +4,7 @@ import java.util.List;
 import main.customer.Customer;
 import main.staff.task.TaskType;
 
-/** Stage 1 cashier: automatically handles at most one payment per turn. */
+/** Cashier: automatically handles at most one payment per turn. */
 public class Cashier extends Staff {
     private int lastPaymentTurn = -1;
 
@@ -30,10 +30,9 @@ public class Cashier extends Staff {
     }
 
     /**
-     * Returns true only for a successful payment. The caller then records
-     * customer.getLockedPriceCents() as revenue, exactly once. The mock demo
-     * does this locally; the real Restaurant will own the payment transaction.
-     * Stage 1 uses full price: no VIP or Happy Hour discounts.
+     * Marks the customer PAID and has the Restaurant charge the order's locked price,
+     * which already includes any discount (VIP 10% off). Returns true only for a
+     * successful payment.
      */
     public boolean handlePayment(Customer customer, int turn) {
         if (turn < 1 || turn <= lastPaymentTurn

@@ -6,9 +6,9 @@ import main.menu.*;
 import main.order.*;
 
 /**
- * A Stage 1 regular customer. Rules stay here rather than in the user interface.
- * Table numbers, item names and prices temporarily replace the team's pending
- * Table, MenuItem and Order classes. See INTEGRATION.md before linking systems.
+ * A regular customer, and the base class for VIPCustomer and CriticCustomer, which
+ * override getWaitingLoss(), adjustBill() and chooseMenuItem().
+ * Rules stay here rather than in the user interface.
  */
 public class Customer {
     private final int customerId;
@@ -147,7 +147,7 @@ public class Customer {
     	//System.out.printf("No transition pending for customer [%d]%n", customerId);
     }
     
-    /** Applies Stage 1 waiting loss once at the end of each game turn. */
+    /** Applies this customer's waiting loss (getWaitingLoss()) once at the end of each game turn. */
     public void endTurn() {
         if (isWaitingForService()) {
             updateSatisfaction(-getWaitingLoss());
