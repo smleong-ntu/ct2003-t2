@@ -33,15 +33,27 @@ Request permissions from [smleong-ntu][profile] if not visible
 ## Food Rule
 Customers are numbered 1-6 in arrival order. Customer `id` orders menu item `(id - 1) % 3`, which gives Salad, Burger, Pasta, Salad, Burger, Pasta.
 
+## Customer Types (Stage 2)
+Customer 2 (arrives on turn 4) is a VIP and customer 4 (arrives on turn 10) is a Critic. The other four are regular customers, so there are still six arrivals.
+
+| Customer | Satisfaction loss per waiting turn | Bill | Order |
+|---|---|---|---|
+| Regular | 8 | Full price | Food rule |
+| VIP | 5 | 10% off | Food rule |
+| Critic | 12 | Full price | Always the most expensive base item (Pasta, $18.00), ignoring the food rule |
+
+**Critic rule:** the Critic always orders the most expensive base item on the menu. If two items cost the same, the one listed first on the menu wins.
+
 ## Test Notes
-Both runs were replayed at the `stage-1` tag (`2c37161`). If anything changes the prompts, the key lists need re-recording.
+If anything changes the prompts, the key lists need re-recording.
+
+### Stage 1
+Replayed at the `stage-1` tag (`288bf85`).
 
 | Result | Choices | Outcome |
 |---|---|---|
 | Victory | Waiter picks Serve, else Take Order, else Seat, else Wait. Chef picks Prepare, else Wait | 5 paid, $66.00, satisfaction 79.20 |
 | Defeat | Waiter and Chef both pick Wait every turn | 0 paid, $0.00, 2 unhappy departures |
-
-To replay them:
 
 ```sh
 # Victory
@@ -49,6 +61,41 @@ echo 1 2 2 1 3 2 1 2 2 1 3 2 1 2 2 1 4 1 3 2 1 2 2 1 3 2 1 2 2 1 3 2 1 2 2 1 | j
 # Defeat
 echo 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
 ```
+
+### Stage 2
+Replayed at `8877389`. Both runs include the VIP and the Critic. The choices are the same as Stage 1, but the Victory keys differ from turn 13 because the Critic (arrives on turn 10) changes the game state.
+
+| Result | Choices | Outcome |
+|---|---|---|
+| Victory | Waiter picks Serve, else Take Order, else Seat, else Wait. Chef picks Prepare, else Wait | 5 paid, $73.50, satisfaction 75.60 |
+| Defeat | Waiter and Chef both pick Wait every turn | 0 paid, $0.00, 2 unhappy departures |
+
+```sh
+# Victory
+echo 1 2 2 1 3 2 1 2 2 1 3 2 1 2 2 1 4 1 3 2 1 2 2 1 1 1 3 2 2 1 3 2 1 2 2 1 | java -cp bin main.gameflow.RestaurantRushApp
+# Defeat (same keys as Stage 1)
+echo 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
+```
+
+## Stage Comparisons
+
+### Stage 1 → Stage 2
+Compare: [`stage-1...stage-2`][cmp-1-2]. The code changes are commits `cb1b478` and `8877389`.
+
+**New files**
+
+| File | What it adds |
+|---|---|
+| `src/main/customer/VIPCustomer.java` | Subclass of `Customer`. Overrides `getWaitingLoss()` (5) and `adjustBill(cents)` (10% off) |
+| `src/main/customer/CriticCustomer.java` | Subclass of `Customer`. Overrides `getWaitingLoss()` (12) and `chooseMenuItem(menu)` (always the most expensive base item) |
+
+**Changed files**
+
+| File | Change and reason |
+|---|---|
+| `src/main/gamesetting/GameDataType.java` | Adds a `STAGE_2` setting whose arrivals on turn 4 and turn 10 create a `VIPCustomer` and a `CriticCustomer`. The brief needs at least one of each, and there are still six arrivals. `DEFAULTS` keeps the Stage 1 arrivals (six regular customers) |
+| `src/main/gameflow/RestaurantRushApp.java` | Starts the game with `STAGE_2` instead of `DEFAULTS` |
+| `README.md` | Customer types, the Critic rule and the Stage 2 test runs |
 
 # GitHub Version Control
 > To keep things clean, let's keep our version control process simple
@@ -86,5 +133,6 @@ origin  https://github.com/smleong-ntu/ct2003-t2.git (push)
 [spec]: https://entuedu-my.sharepoint.com/:w:/r/personal/c260010_e_ntu_edu_sg/Documents/CT2004%20-%20Software%20Engineering/Specifications.docx?d=wd730d71b5d8048e4a4afa840136bc5c6&csf=1&web=1&e=73DPu9
 [ghconfig]: https://youtu.be/r8jQ9hVA2qs?si=aVXLdkI_udhQNqrS&t=186
 [profile]: https://github.com/smleong-ntu
+[cmp-1-2]: https://github.com/smleong-ntu/ct2003-t2/compare/stage-1...stage-2
 [jdk]: https://www.oracle.com/asean/java/technologies/downloads/#jdk25-windows
 [jdk-setup]: https://www.youtube.com/watch?v=jvhL10Fvj4s
