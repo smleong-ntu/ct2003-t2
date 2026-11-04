@@ -40,7 +40,7 @@ public class GameObjective implements GameEventListener {
 		System.out.printf("Total revenue: %s/%s%n", revenueConversion.apply(tracked.revenue), revenueConversion.apply(revenue));
 		
 		if (tracked.satisfaction <= 0.f) {
-			System.out.printf("Average satisfaction: N/A (target %.2f)%n", tracked.satisfaction, satisfaction);			
+			System.out.printf("Average satisfaction: N/A (target %.2f)%n", satisfaction);			
 		}
 		
 		else {

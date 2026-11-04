@@ -3,7 +3,7 @@ package main.gameflow.turns;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Optional;
 import main.events.*;
 import main.restaurant.*;
@@ -22,7 +22,7 @@ public class TurnStartView extends TurnView {
 	private String queueDisplay;
 	
 	//Staff tasks???
-	Map<Class<? extends Task>, String> taskMap = new HashMap<>();
+	Map<Class<? extends Task>, String> taskMap = new LinkedHashMap<>();   // insertion order: Waiter tasks, then Chef tasks
 	
 	@Override
 	protected void display() {

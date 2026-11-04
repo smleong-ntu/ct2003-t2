@@ -87,24 +87,23 @@ public class ManagerStep extends TurnStep {
 			selection = -1;
 			
 			try {
-				selection = input.nextInt() - 1;			
-				
-				//This version will check task valid every time this is called
-				isValidChoice = tasks.get(selection).isTaskValid(reason, queuedTasks);
+				selection = nextInt() - 1;
 			}
 			
 			catch (InputMismatchException e){
-				System.out.printf("Mismatch input %s. Please enter an integer between 1-%d%n", e.getMessage(), tasks.size());
+				System.out.printf("Not a number. Please enter an integer between 1-%d%n", tasks.size());
 				input.nextLine();
 				continue;
 			}
 			
-			//For some reason this is still not triggering, i think is due to the error only being below
-			catch (IndexOutOfBoundsException e) {
-				System.out.printf("Invalid integer %s. Please enter an integer between 1-%d%n", e.getMessage(), tasks.size());
+			if (selection < 0 || selection >= tasks.size()) {
+				System.out.printf("There is no task %d. Please enter an integer between 1-%d%n", selection + 1, tasks.size());
 				input.nextLine();
 				continue;
 			}
+			
+			//This version will check task valid every time this is called
+			isValidChoice = tasks.get(selection).isTaskValid(reason, queuedTasks);
 	
 			//System.out.printf("Selected [%d]%n", selection + 1);
 			
@@ -115,6 +114,15 @@ public class ManagerStep extends TurnStep {
 		} while (!isValidChoice);
 		
 		return tasks.get(selection);
+	}
+	
+	//Reads the next number; ends the game cleanly when there is no more input (Ctrl-D, or a key list that runs out)
+	private int nextInt() {
+		if (!input.hasNext()) {
+			System.out.printf("%nInput ended before the game finished. Game stopped.%n");
+			System.exit(0);
+		}
+		return input.nextInt();
 	}
 	
 	//Asks which customer or order the task acts on, when there is more than one
@@ -134,7 +142,7 @@ public class ManagerStep extends TurnStep {
 
 		while (true) {
 			try {
-				int choice = input.nextInt();
+				int choice = nextInt();
 
 				if (choice >= 1 && choice <= targets.size()) {
 					task.setTarget(choice - 1);
