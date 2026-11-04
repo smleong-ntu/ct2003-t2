@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * First-in, first-out queue of customers waiting for a table.
  * enqueue() and remove() are package-private: other packages go through
- * Restaurant.addArrival, seatCustomer and applyEndOfTurnWaiting.
+ * Restaurant.addArrival and seatCustomer; a customer who leaves is removed by Restaurant.
  */
 public class WaitingQueue {
 

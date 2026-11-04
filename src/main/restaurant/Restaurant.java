@@ -376,28 +376,6 @@ public class Restaurant implements GameSubject{
         		));
     }
     
-    //REVIEW: Why is the restaurant applying this in the first place? what is the role of the restaurant?
-    //Somewhat deprecated through exit binding, no longer need to call this from TurnManager->EndStep
-    /**
-     * Applies the end-of-turn waiting loss to every queued or seated customer who has not been
-     * served, and cleans up after anyone who leaves. Returns the customers who left.
-     */
-    public List<Customer> applyEndOfTurnWaiting() {
-        List<Customer> left = new ArrayList<>();
-        for (Customer c : new ArrayList<>(customers)) {
-            CustomerState state = c.getState();
-            if (state == CustomerState.QUEUING || state == CustomerState.SEATED
-                    || state == CustomerState.WAITING_FOR_FOOD) {
-                c.endTurn();
-                if (c.getState() == CustomerState.LEFT) {
-                    recordDeparture(c);
-                    left.add(c);
-                }
-            }
-        }
-        return Collections.unmodifiableList(left);
-    }
-
     /**
      * Records a customer leaving unhappy: cancels their unfinished order (if registered),
      * frees their table (if seated) and removes them from the waiting queue.
