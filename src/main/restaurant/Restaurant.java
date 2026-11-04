@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.function.Supplier;
 
 /**
  * Aggregate root: owns the tables, waiting queue, menu, orders, revenue and every
@@ -64,7 +65,7 @@ public class Restaurant implements GameSubject{
         
         this.tables = Collections.unmodifiableList(created);
         this.waitingQueue = new WaitingQueue();
-        this.menu = new Menu(data);
+        this.menu = new Menu(data.menuItems().stream().map(Supplier::get).toList());
         this.revenueCents = 0;
         
         this.view = new RestaurantView();

@@ -3,19 +3,25 @@ package main.menu;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import main.gamesetting.*;
 
 /**
- * Registry of every dish the restaurant offers.
- * The constructor registers the three base items.
+ * Registry of every dish the restaurant offers: the base items it is given.
  */
 public class Menu {
 
     private final List<MenuItem> baseItems = new ArrayList<>();
 
-    /** Creates the base menu: Salad ($9.00, 1), Burger ($15.00, 1), Pasta ($18.00, 2). from game data */
-    public Menu(GameData data) {
-    	data.menuItems().forEach(item -> baseItems.add(item.get()));
+    /**
+     * Creates the menu from the given base items, in order (Salad, Burger, Pasta in every game
+     * setting so far).
+     *
+     * @throws IllegalArgumentException if the list is null or empty
+     */
+    public Menu(List<? extends MenuItem> items) {
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("A menu needs at least one base item");
+        }
+        baseItems.addAll(items);
     }
 
     /** Read-only view of the base items, in registration order. */
@@ -50,7 +56,7 @@ public class Menu {
      * which keeps any rule built on it deterministic.
      */
     public MenuItem getMostExpensive() {
-        MenuItem best = baseItems.get(0);   // never empty: the constructor adds 3 items
+        MenuItem best = baseItems.get(0);   // never empty: the constructor rejects an empty list
         for (MenuItem item : baseItems) {
             if (item.getPriceCents() > best.getPriceCents()) {
                 best = item;
