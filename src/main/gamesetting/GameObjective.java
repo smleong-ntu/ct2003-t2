@@ -38,7 +38,14 @@ public class GameObjective implements GameEventListener {
 		System.out.printf("Objective [%s] %s%n", name, isCompleted ? "Completed" : "Incomplete");
 		System.out.printf("Total paid customers: %d/%d%n", tracked.paidCustomers, paidCustomers);
 		System.out.printf("Total revenue: %s/%s%n", revenueConversion.apply(tracked.revenue), revenueConversion.apply(revenue));
-		System.out.printf("Average satisfaction: %.2f/%.2f%n", tracked.satisfaction, satisfaction);
+		
+		if (tracked.satisfaction <= 0.f) {
+			System.out.printf("Average satisfaction: N/A (target %.2f)%n", tracked.satisfaction, satisfaction);			
+		}
+		
+		else {
+			System.out.printf("Average satisfaction: %.2f/%.2f%n", tracked.satisfaction, satisfaction);			
+		}
 	}
 	
 	@Override
