@@ -59,7 +59,7 @@ public class GameDataType {
 	}};
 	
 	public static final GameData.Setting STAGE_2 = new GameData.Setting() {{
-		name = "default setting";
+		name = "stage-2";
 		turns = 18;
 		tables = 2;
 		
