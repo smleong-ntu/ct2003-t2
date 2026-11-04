@@ -3,6 +3,7 @@ package main.menu;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import main.gamesetting.*;
 
 /**
  * Registry of every dish the restaurant offers.
@@ -12,11 +13,9 @@ public class Menu {
 
     private final List<MenuItem> baseItems = new ArrayList<>();
 
-    /** Creates the base menu: Salad ($9.00, 1), Burger ($15.00, 1), Pasta ($18.00, 2). */
-    public Menu() {
-        baseItems.add(new MenuItem("Salad", 900, 1));
-        baseItems.add(new MenuItem("Burger", 1500, 1));
-        baseItems.add(new MenuItem("Pasta", 1800, 2));
+    /** Creates the base menu: Salad ($9.00, 1), Burger ($15.00, 1), Pasta ($18.00, 2). from game data */
+    public Menu(GameData data) {
+    	data.menuItems().forEach(item -> baseItems.add(item.get()));
     }
 
     /** Read-only view of the base items, in registration order. */

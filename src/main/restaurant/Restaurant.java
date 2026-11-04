@@ -46,30 +46,29 @@ public class Restaurant implements GameSubject{
     private List<GameEventListener> listeners = new ArrayList<>();
     private RestaurantView view;
 
-    /** Creates a restaurant with the given number of tables, an empty queue, the base menu and $0. */
-    public Restaurant(int tableCount) {
-        if (tableCount < 1) {
-            throw new IllegalArgumentException("A restaurant needs at least 1 table: " + tableCount);
-        }
-        List<Table> created = new ArrayList<>();
-        for (int i = 1; i <= tableCount; i++) {
-            created.add(new Table(i));
-        }
-        this.tables = Collections.unmodifiableList(created);
-        this.waitingQueue = new WaitingQueue();
-        this.menu = new Menu();
-        this.revenueCents = 0;
-        
-        this.view = new RestaurantView();
-        subscribe(view);
-    }
-    
     /**
      * Uses gamedata for initalization, calls back to tableCount, but can be done directly in this method
      * @param data: holds the data for entire game setting, more than 1 setting may be needed to initialize the restaurant
      */
     public Restaurant(GameData data) {
-    	this(data.tables());
+    	int tableCount = data.tables();
+    	
+    	if (tableCount < 1) {
+            throw new IllegalArgumentException("A restaurant needs at least 1 table: " + tableCount);
+        }
+        
+    	List<Table> created = new ArrayList<>();
+        for (int i = 1; i <= tableCount; i++) {
+            created.add(new Table(i));
+        }
+        
+        this.tables = Collections.unmodifiableList(created);
+        this.waitingQueue = new WaitingQueue();
+        this.menu = new Menu(data);
+        this.revenueCents = 0;
+        
+        this.view = new RestaurantView();
+        subscribe(view);
     	
     	//binds functions to send waiting queue to listeners when it changes
     	waitingQueue.onQueueAdd(()->broadcast(new OnRestaurant.QueueUpdated(waitingQueue)));

@@ -9,6 +9,7 @@ import java.util.function.Function;
 import main.gameflow.turns.*;
 import main.customer.*;
 import main.staff.*;
+import main.menu.*;
 
 public class GameData {
 	public static class Setting{
@@ -18,6 +19,7 @@ public class GameData {
 		public List<Supplier<? extends TurnStep>> stepOrder;
 		public Map<Supplier<? extends Staff>, Integer> staffList;
 		public Map<Integer,Function<Integer, Customer>> arrivals;
+		public List<Supplier<? extends MenuItem>> menuItems;
 	}
 	
 	private final String name;
@@ -26,6 +28,7 @@ public class GameData {
 	private final List<Supplier<? extends TurnStep>> stepOrder;
 	private final Map<Supplier<? extends Staff>, Integer> staffList;
 	private final Map<Integer,Function<Integer, Customer>> arrivals;
+	private final List<Supplier<? extends MenuItem>> menuItems;
 	
 	public GameData(Setting setting) {
 		name = setting.name;
@@ -34,6 +37,7 @@ public class GameData {
 		stepOrder = new ArrayList<>(setting.stepOrder);
 		staffList = new HashMap<>(setting.staffList);
 		arrivals = new HashMap<>(setting.arrivals);
+		menuItems = new ArrayList<>(setting.menuItems);
 	}
 	
 	public void display() {
@@ -58,4 +62,5 @@ public class GameData {
 	public List<Supplier<? extends TurnStep>> stepOrder() { return stepOrder; }
 	public Map<Supplier<? extends Staff>, Integer> staffList() { return staffList; }
 	public Map<Integer,Function<Integer, Customer>> arrivals() { return arrivals; };
+	public final List<Supplier<? extends MenuItem>> menuItems() { return menuItems; };
 }

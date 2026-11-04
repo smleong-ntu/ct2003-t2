@@ -5,6 +5,7 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 import main.gameflow.turns.*;
+import main.menu.MenuItem;
 import main.customer.*;
 import main.staff.*;
 
@@ -48,7 +49,13 @@ public class GameDataType {
 			entry(16, id ->  new Customer(id)),
 			entry(17, id ->  null),
 			entry(18, id ->  null)
-		);		
+		);	
+		
+		menuItems = List.of(
+			() -> new MenuItem("Salad", 900, 1),
+			() -> new MenuItem("Burger", 1500, 1),
+			() -> new MenuItem("Pasta", 1800, 2)
+		);
 	}};
 	
 	public static final GameData.Setting STAGE_2 = new GameData.Setting() {{
@@ -90,6 +97,12 @@ public class GameDataType {
 			entry(16, id ->  new Customer(id)),
 			entry(17, id ->  null),
 			entry(18, id ->  null)
-		);		
+		);
+		
+		menuItems = List.of(
+			() -> new MenuItem("Salad", 900, 1),
+			() -> new MenuItem("Burger", 1500, 1),
+			() -> new MenuItem("Pasta", 1800, 2)
+		);
 	}};
 }
