@@ -5,23 +5,27 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Registry of every dish the restaurant offers: the base items it is given.
+ * Registry of every dish the restaurant offers: the base items it is given
+ * and the combos built from them.
  */
 public class Menu {
 
     private final List<MenuItem> baseItems = new ArrayList<>();
+    private final List<ComboMeal> combos = new ArrayList<>();
 
     /**
-     * Creates the menu from the given base items, in order (Salad, Burger, Pasta in every game
-     * setting so far).
+     * Creates the menu: the given base items in order (Salad, Burger, Pasta in every game
+     * setting so far), then the Salad + Pasta combo.
      *
-     * @throws IllegalArgumentException if the list is null or empty
+     * @throws IllegalArgumentException if the list is null or empty, or has no Salad or no Pasta
      */
     public Menu(List<? extends MenuItem> items) {
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("A menu needs at least one base item");
         }
         baseItems.addAll(items);
+        // Combo rule: customers whose id is divisible by 3 order from getCombos()
+        combos.add(new ComboMeal(getItemByName("Salad"), getItemByName("Pasta")));
     }
 
     /** Read-only view of the base items, in registration order. */
@@ -29,9 +33,34 @@ public class Menu {
         return Collections.unmodifiableList(baseItems);
     }
 
-    /** Read-only copy of every dish, in registration order (base items first). */
+    /** Read-only view of the combos, in registration order. */
+    public List<ComboMeal> getCombos() {
+        return Collections.unmodifiableList(combos);
+    }
+
+    /** Read-only copy of every dish: base items first, then combos. */
     public List<MenuItem> getAllItems() {
-        return Collections.unmodifiableList(new ArrayList<>(baseItems));
+        List<MenuItem> all = new ArrayList<>(baseItems);
+        all.addAll(combos);
+        return Collections.unmodifiableList(all);
+    }
+
+    /**
+     * Adds a combo to the menu.
+     *
+     * @throws IllegalArgumentException if the combo is null or a dish with the same name
+     *         (case-insensitive) is already on the menu
+     */
+    public void addCombo(ComboMeal combo) {
+        if (combo == null) {
+            throw new IllegalArgumentException("Cannot add a null combo");
+        }
+        for (MenuItem item : getAllItems()) {
+            if (item.getName().equalsIgnoreCase(combo.getName())) {
+                throw new IllegalArgumentException("Menu already has an item named \"" + combo.getName() + "\"");
+            }
+        }
+        combos.add(combo);
     }
 
     /**
