@@ -63,7 +63,7 @@ echo 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 | j
 ```
 
 ### Stage 2
-Replayed at `8877389`. Both runs include the VIP and the Critic. The choices are the same as Stage 1, but the Victory keys differ from turn 13 because the Critic (arrives on turn 10) changes the game state.
+Replayed at the `stage-2` tag. Both runs include the VIP and the Critic. The choices are the same as Stage 1, but the Victory keys differ from turn 13 because the Critic (arrives on turn 10) changes the game state.
 
 | Result | Choices | Outcome |
 |---|---|---|
@@ -80,7 +80,7 @@ echo 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 | j
 ## Stage Comparisons
 
 ### Stage 1 → Stage 2
-Compare: [`stage-1...stage-2`][cmp-1-2]. The code changes are commits `cb1b478` and `8877389`.
+Compare: [`stage-1...stage-2`][cmp-1-2]. The new customer types are commits `cb1b478` and `8877389`. Commits `d7295d2` to `2bfa2ad` add the menu setting, fixes and display tidy-ups.
 
 **New files**
 
@@ -93,9 +93,16 @@ Compare: [`stage-1...stage-2`][cmp-1-2]. The code changes are commits `cb1b478` 
 
 | File | Change and reason |
 |---|---|
-| `src/main/gamesetting/GameDataType.java` | Adds a `STAGE_2` setting whose arrivals on turn 4 and turn 10 create a `VIPCustomer` and a `CriticCustomer`. The brief needs at least one of each, and there are still six arrivals. `DEFAULTS` keeps the Stage 1 arrivals (six regular customers) |
+| `src/main/gamesetting/GameDataType.java` | Adds a `STAGE_2` setting (named `stage-2`) whose arrivals on turn 4 and turn 10 create a `VIPCustomer` and a `CriticCustomer`. The brief needs at least one of each, and there are still six arrivals. `DEFAULTS` keeps the Stage 1 arrivals (six regular customers). Both settings now list the menu items (Salad, Burger, Pasta) |
+| `src/main/gamesetting/GameData.java` | Adds `menuItems()`, so each setting chooses its own menu instead of `Menu` hard-coding it |
+| `src/main/menu/Menu.java` | Takes the list of base items from the setting (`Menu(List<? extends MenuItem>)`) and rejects an empty list. It doesn't import the settings package, so `menu` and `gamesetting` don't depend on each other |
+| `src/main/restaurant/Restaurant.java` | Builds the menu from the setting's items. `Restaurant(int)` is removed; `Restaurant(GameData)` is the only constructor |
+| `src/main/gamesetting/GameObjective.java` | Shows `N/A (target 60.00)` for average satisfaction when nobody has paid, as the brief asks, instead of `0.00` |
+| `src/main/gameflow/turns/ManagerStep.java` | Clear messages for a word (`Not a number`) or an out-of-range number (`There is no task N`). If input runs out, the game stops with a message instead of a stack trace |
+| `src/main/gameflow/turns/TurnStartView.java` | The `Tasks:` line lists Waiter then Chef tasks, the same order as the prompts (`LinkedHashMap` instead of `HashMap`) |
+| `src/main/customer/Customer.java`, `src/main/staff/Cashier.java` | Comments only: `Customer` is the base class for VIP and Critic, and the Cashier's charge already includes the VIP discount |
 | `src/main/gameflow/RestaurantRushApp.java` | Starts the game with `STAGE_2` instead of `DEFAULTS` |
-| `README.md` | Customer types, the Critic rule and the Stage 2 test runs |
+| `README.md` | Customer types, the Critic rule, the Stage 2 test runs and this comparison |
 
 # GitHub Version Control
 > To keep things clean, let's keep our version control process simple
