@@ -17,7 +17,13 @@ public class SeatAutoTask extends HostTask{
 	//What is the reason why it is invalid?
 	@Override
 	public boolean isTaskValid(StringBuilder reason, List<Task> taskQueue) {
-		return true;
+		reason.append(String.format( ">>%s<< missing execute for %s -> %s", 
+				name,
+				host.getClass().getSimpleName(),
+				getClass().getSimpleName()
+		));
+		
+		return false;
 	}
 	
 	@Override
