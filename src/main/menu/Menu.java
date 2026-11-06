@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Registry of every dish the restaurant offers: the base items it is given
- * and the combos built from them.
+ * Registry of every dish the restaurant offers: base items and combos, both given by the
+ * game setting. Combos are kept apart, so rules on base items never pick a combo.
  */
 public class Menu {
 
@@ -14,18 +14,30 @@ public class Menu {
     private final List<ComboMeal> combos = new ArrayList<>();
 
     /**
-     * Creates the menu: the given base items in order (Salad, Burger, Pasta in every game
-     * setting so far), then the Salad + Pasta combo.
+     * Creates the menu from the setting's items, keeping their order. Each {@link ComboMeal}
+     * goes to the combos, every other item to the base items.
      *
-     * @throws IllegalArgumentException if the list is null or empty, or has no Salad or no Pasta
+     * @throws IllegalArgumentException if the list is null or has no base item, two dishes
+     *         share a name (case-insensitive), or a combo uses a dish that is not a base item
      */
     public Menu(List<? extends MenuItem> items) {
-        if (items == null || items.isEmpty()) {
+        if (items == null) {
             throw new IllegalArgumentException("A menu needs at least one base item");
         }
-        baseItems.addAll(items);
-        // Combo rule: customers whose id is divisible by 3 order from getCombos()
-        combos.add(new ComboMeal(getItemByName("Salad"), getItemByName("Pasta")));
+        for (MenuItem item : items) {
+            if (item instanceof ComboMeal combo) {
+                combos.add(requireNewName(combo));
+            } else {
+                baseItems.add(requireNewName(item));
+            }
+        }
+        if (baseItems.isEmpty()) {
+            throw new IllegalArgumentException("A menu needs at least one base item");
+        }
+        for (ComboMeal combo : combos) {
+            requireBaseItem(combo, combo.getComponentA());
+            requireBaseItem(combo, combo.getComponentB());
+        }
     }
 
     /** Read-only view of the base items, in registration order. */
@@ -55,12 +67,7 @@ public class Menu {
         if (combo == null) {
             throw new IllegalArgumentException("Cannot add a null combo");
         }
-        for (MenuItem item : getAllItems()) {
-            if (item.getName().equalsIgnoreCase(combo.getName())) {
-                throw new IllegalArgumentException("Menu already has an item named \"" + combo.getName() + "\"");
-            }
-        }
-        combos.add(combo);
+        combos.add(requireNewName(combo));
     }
 
     /**
@@ -92,6 +99,29 @@ public class Menu {
             }
         }
         return best;
+    }
+
+    private <T extends MenuItem> T requireNewName(T item) {
+        if (item == null) {
+            throw new IllegalArgumentException("A menu item cannot be null");
+        }
+        for (MenuItem existing : getAllItems()) {
+            if (existing.getName().equalsIgnoreCase(item.getName())) {
+                throw new IllegalArgumentException("Menu already has an item named \"" + item.getName() + "\"");
+            }
+        }
+        return item;
+    }
+
+    // The brief: a combo is made of two existing menu items
+    private void requireBaseItem(ComboMeal combo, MenuItem component) {
+        for (MenuItem item : baseItems) {
+            if (item.getName().equalsIgnoreCase(component.getName())) {
+                return;
+            }
+        }
+        throw new IllegalArgumentException(
+                "\"" + combo.getName() + "\" uses \"" + component.getName() + "\", which is not on the menu");
     }
 
     public int size() {

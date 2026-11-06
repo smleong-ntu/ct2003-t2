@@ -2,9 +2,11 @@ package main.gamesetting;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import static java.util.Map.entry;
 
 import main.gameflow.turns.*;
+import main.menu.ComboMeal;
 import main.menu.MenuItem;
 import main.customer.*;
 import main.staff.*;
@@ -145,10 +147,15 @@ public class GameDataType {
 			entry(18, id ->  null)
 		);
 		
+		//A combo reuses the base items' suppliers, so each price is written once
+		Supplier<MenuItem> salad = () -> new MenuItem("Salad", 900, 1);
+		Supplier<MenuItem> pasta = () -> new MenuItem("Pasta", 1800, 2);
+		
 		menuItems = List.of(
-			() -> new MenuItem("Salad", 900, 1),
+			salad,
 			() -> new MenuItem("Burger", 1500, 1),
-			() -> new MenuItem("Pasta", 1800, 2)
+			pasta,
+			() -> new ComboMeal(salad.get(), pasta.get())
 		);
 	}};
 }
