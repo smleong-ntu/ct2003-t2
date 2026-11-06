@@ -19,8 +19,7 @@ public class GameDataType {
 		    ArrivalStep::new,
 		    ManagerStep::new,
 		    TaskStep::new,
-		    DiningStep::new,
-		    EndStep::new
+		    DiningStep::new
 		);
 		
 		staffList = Map.of(
@@ -67,8 +66,7 @@ public class GameDataType {
 		    ArrivalStep::new,
 		    ManagerStep::new,
 		    TaskStep::new,
-		    DiningStep::new,
-		    EndStep::new
+		    DiningStep::new
 		);
 		
 		staffList = Map.of(
@@ -112,11 +110,11 @@ public class GameDataType {
 		tables = 2;
 		
 		stepOrder = List.of(
+			PolicyStep::new,
 		    ArrivalStep::new,
 		    ManagerStep::new,
 		    TaskStep::new,
-		    DiningStep::new,
-		    EndStep::new
+		    DiningStep::new
 		);
 		
 		staffList = Map.of(
