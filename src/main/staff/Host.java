@@ -9,5 +9,8 @@ public class Host extends Staff{
 	//How does host choose a table from queue to seat?
 	
 	/*Override the setting on each staff type*/
-	//How do you get the setting to override?
+	@Override
+    protected TaskType.Setting getTaskType() {
+        return TaskType.HOST;
+    }
 }
