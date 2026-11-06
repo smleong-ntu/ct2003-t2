@@ -24,10 +24,6 @@ public class PolicyStep extends TurnStep{
 		
 		HappyHour policy = restaurant.getHappyHour();
 		
-//		if (policy.isActive(turn)) {
-//			System.out.printf("Happy hour active. Turns remaining %d%n", policy.remainingTurns(turn));
-//		}
-		
 		//only run if policy has never been used
 		if (!policy.hasBeenUsed()) {			
 			

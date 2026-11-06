@@ -4,6 +4,13 @@ import main.restaurant.*;
 
 public class OnRestaurant {
 
+	public static class PolicyUpdated implements GameEvent{
+		private final HappyHour policy;
+		
+		public PolicyUpdated(HappyHour policy) { this.policy = policy; }
+		public HappyHour policy() { return policy; }
+	}
+	
 	public static class QueueUpdated implements GameEvent{
 		private final WaitingQueue queue;
 		

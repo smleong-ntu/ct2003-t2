@@ -36,6 +36,7 @@ public class TurnStartView extends TurnView {
 		displayOccupiedTables();
 		displayCustomerInfo();
 		displayAllTasks();
+		displayPolicy();
 		System.out.println(">>-------------------------<<");
 	}
 		
@@ -111,6 +112,10 @@ public class TurnStartView extends TurnView {
 			System.out.print(" | ");
 		});
 		System.out.println();
+	}
+	
+	private void displayPolicy() {
+		
 	}
 	
 	private void populateTaskMap() {
