@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.InputMismatchException;
 
 import main.gameflow.*;
@@ -14,7 +13,6 @@ import main.staff.task.*;
 
 public class ManagerStep extends TurnStep {
 	
-	private Scanner input;
 	private Map<Class<? extends Staff>, List<Staff>> staffList = new HashMap<>();
 	
 	@Override
@@ -22,7 +20,6 @@ public class ManagerStep extends TurnStep {
 		super.initialize(manager);
 		
 		name = "Manager Selection";
-		input = new Scanner(System.in);
 		
 		staffList = GameSession.session().restaurant().getStaffList();
 	}
@@ -114,15 +111,6 @@ public class ManagerStep extends TurnStep {
 		} while (!isValidChoice);
 		
 		return tasks.get(selection);
-	}
-	
-	//Reads the next number; ends the game cleanly when there is no more input (Ctrl-D, or a key list that runs out)
-	private int nextInt() {
-		if (!input.hasNext()) {
-			System.out.printf("%nInput ended before the game finished. Game stopped.%n");
-			System.exit(0);
-		}
-		return input.nextInt();
 	}
 	
 	//Asks which customer or order the task acts on, when there is more than one

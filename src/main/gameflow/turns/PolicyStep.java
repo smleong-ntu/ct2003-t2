@@ -1,7 +1,6 @@
 package main.gameflow.turns;
 
 import java.util.InputMismatchException;
-import java.util.Scanner;
 import main.gameflow.*;
 import main.restaurant.*;
 
@@ -38,8 +37,7 @@ public class PolicyStep extends TurnStep{
 	}
 	
 	private boolean selectPolicy() {
-		//No policy has ever been used, ask for user input	
-		Scanner input = new Scanner(System.in);
+		//No policy has ever been used, ask for user input (shared reader from TurnStep)
 		String[] choiceDisplay = {"Yes", "No"};
 		
 		for (int i = 0; i < choiceDisplay.length; i++) {
@@ -53,7 +51,7 @@ public class PolicyStep extends TurnStep{
 			selection = -1;
 			
 			try {
-				selection = input.nextInt() - 1;
+				selection = nextInt() - 1;
 			}
 			
 			catch (InputMismatchException e){
