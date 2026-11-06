@@ -29,7 +29,7 @@ public class PolicyStep extends TurnStep{
 			
 			System.out.printf("%s is available. Activate?%n", policy.getClass().getSimpleName());
 			if (selectPolicy()) {
-				policy.activate(turn);
+				policy.activate();
 				System.out.printf("Policy %s activated%n", policy.getClass().getSimpleName());
 			}
 		}

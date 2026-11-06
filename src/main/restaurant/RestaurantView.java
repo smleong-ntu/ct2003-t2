@@ -12,9 +12,12 @@ public class RestaurantView implements GameEventListener{
 			}
 			
 			case OnRestaurant.PolicyUpdated onPolicyUpdated -> {
-//				if (policy.isActive(turn)) {
-					System.out.printf("Happy hour active. Turns remaining %d%n", onPolicyUpdated.policy().remainingTurns(0));
-//				}
+				HappyHour policy = onPolicyUpdated.policy();
+				if (policy.isActive()) {
+					System.out.printf("Happy hour active. Turns remaining %d%n", policy.remainingTurns());
+				} else {
+					System.out.println("Happy hour has ended");
+				}
 			}
 			default -> {}
 		}

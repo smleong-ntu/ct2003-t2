@@ -34,7 +34,7 @@ public class Restaurant implements GameSubject{
     private final List<Table> tables;
     private final WaitingQueue waitingQueue;
     private final Menu menu;
-    private final HappyHour happyHour = new HappyHour();
+    private final HappyHour happyHour = new HappyHour(this::applyRecovery);
     private final List<Order> orders = new ArrayList<>();
     private final List<Customer> customers = new ArrayList<>();   // every arrival, in arrival order
     private final List<Integer> paidSatisfactions = new ArrayList<>();   // recorded at payment time
@@ -75,6 +75,7 @@ public class Restaurant implements GameSubject{
     	//binds functions to send waiting queue to listeners when it changes
     	waitingQueue.onQueueAdd(()->broadcast(new OnRestaurant.QueueUpdated(waitingQueue)));
     	waitingQueue.onQueueRemove(()->broadcast(new OnRestaurant.QueueUpdated(waitingQueue)));
+    	happyHour.onUpdate(()->broadcast(new OnRestaurant.PolicyUpdated(happyHour)));
     	
     	//Create the staff list from data
     	data.staffList().forEach((key, value) -> {
@@ -211,7 +212,7 @@ public class Restaurant implements GameSubject{
         // Step 2: the customer adjusts its own bill (VIP 10% off)
         int priceCents = c.adjustBill(item.getPriceCents());
         // Step 3: Happy Hour, applied after the customer's own discount
-        if (happyHour.isActive(turn)) {
+        if (happyHour.isActive()) {
             priceCents = happyHour.applyTo(priceCents);
         }
         Order order = new Order(item, c, priceCents, turn);
@@ -387,18 +388,20 @@ public class Restaurant implements GameSubject{
     }
     
     /**
-     * Call at the start of every turn. While Happy Hour is active, customers still waiting for
-     * a table or food recover 15 satisfaction (maximum 100). Does nothing otherwise.
+     * Customers still waiting for a table or food recover the given satisfaction (maximum 100).
+     * Happy Hour calls this; it decides when.
+     *
+     * @throws IllegalArgumentException if the amount is negative
      */
-    public void applyHappyHourRecovery(int turn) {
-        if (!happyHour.isActive(turn)) {
-            return;
+    public void applyRecovery(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Recovery cannot be negative: " + amount);
         }
         for (Customer c : customers) {
             CustomerState state = c.getState();
             if (state == CustomerState.QUEUING || state == CustomerState.SEATED
                     || state == CustomerState.WAITING_FOR_FOOD) {
-                c.updateSatisfaction(HappyHour.RECOVERY_POINTS);
+                c.updateSatisfaction(amount);
             }
         }
     }
@@ -465,6 +468,8 @@ public class Restaurant implements GameSubject{
     	customers.forEach(customer -> {
     		customer.tick();
     	});
+    	// After the customers' own tick, so recovery sees this turn's states
+    	happyHour.tick();
     }
     
     public void end() {
