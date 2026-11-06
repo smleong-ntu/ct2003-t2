@@ -31,4 +31,10 @@ public class TaskType {
 			staff -> new WaitTask("Wait", staff)
 		);
 	}};
+	
+	public static final TaskType.Setting HOST = new TaskType.Setting() {{
+		taskList = List.of(
+			staff -> new WaitTask("Wait", staff)
+		);
+	}};
 }
