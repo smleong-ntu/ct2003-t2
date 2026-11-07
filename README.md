@@ -30,6 +30,8 @@ java -cp bin main.gameflow.RestaurantRushApp
 Visit [Report][spec] for object diagrams for reference
 Request permissions from [smleong-ntu][profile] if not visible
 
+Visit [Presentation][slides] for our group presentation
+
 ## Food Rule
 Customers are numbered 1-6 in arrival order. Customer `id` orders menu item `(id - 1) % 3`, which gives Salad, Burger, Pasta, Salad, Burger, Pasta.
 
@@ -138,6 +140,7 @@ origin  https://github.com/smleong-ntu/ct2003-t2.git (push)
 4. git push -u origin (main)
 
 [spec]: https://entuedu-my.sharepoint.com/:w:/r/personal/c260010_e_ntu_edu_sg/Documents/CT2004%20-%20Software%20Engineering/Specifications.docx?d=wd730d71b5d8048e4a4afa840136bc5c6&csf=1&web=1&e=73DPu9
+[slides]: https://entuedu-my.sharepoint.com/:p:/r/personal/cloh021_e_ntu_edu_sg/Documents/CT2003-t2%20Presentation.pptx?d=w42b66e3a5f66482b829918e75e1e831e&csf=1&web=1&e=4ipo7E
 [ghconfig]: https://youtu.be/r8jQ9hVA2qs?si=aVXLdkI_udhQNqrS&t=186
 [profile]: https://github.com/smleong-ntu
 [cmp-1-2]: https://github.com/smleong-ntu/ct2003-t2/compare/stage-1...stage-2
