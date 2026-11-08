@@ -106,6 +106,51 @@ Compare: [`stage-1...stage-2`][cmp-1-2]. The new customer types are commits `cb1
 | `src/main/gameflow/RestaurantRushApp.java` | Starts the game with `STAGE_2` instead of `DEFAULTS` |
 | `README.md` | Customer types, the Critic rule, the Stage 2 test runs and this comparison |
 
+### Stage 3
+
+Replayed at commit `0cb8d42`. 
+
+Stage 3 introduces automatic customer seating through the Host role. 
+
+The Stage 2 replay is no longer valid in Stage 3 because the Host automatically seats customers before Manager Selection. 
+This changes the sequence of valid tasks and causes the Stage 2 recorded inputs to fall out of sync with the game state. A new Stage 3 replay must therefore be recorded.
+
+
+| Result | Choices | Outcome |
+|---|---|---|
+| Victory | Host auto-seats customers. Waiter picks Serve, else Take Order, else Seat, else Wait. Chef picks Prepare, else Wait. | 5 paid, $67.50, satisfaction 85.60 |
+| Defeat | Waiter and Chef both pick Wait every turn | 0 paid, $0.00, 2 unhappy departures |
+
+```sh
+# Victory
+echo  2 2 1 2 4 2 2 3 2 2 2 1 1 3 2 4 2 2 1 4 1 3 2 2 1 4 1 3 2 4 2 2 1 3 2 2 1 3 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
+# Defeat (same keys as Stage 1)
+echo 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
+```
+
+## Stage Comparisons
+
+### Stage 2 → Stage 3
+
+**Changed files**
+
+| File | Change and reason |
+|---|---|
+| `src/main/staff/Host.java` | Subclass of Staff. Added `findWaitingCustomer()` and `findAvailableTable()`. The Host selects the first waiting customer (FIFO) and the first available table for automatic seating |
+| `src/main/staff/task/SeatAutoTask.java` | Implemented automatic seating behaviour. Added execute() to seat customers automatically and `isTaskValid()` to validate customer and table availability before seating. |
+
+
+Verification, observed during gameplay:
+
+```
+Queue: [Customer 1]
+
+Executing SeatAutoTask: Seat Customer done by >> Host [ID:0] <<
+```
+
+This confirms that the Host automatically seats customers before Manager Selection.
+
+
 # GitHub Version Control
 > To keep things clean, let's keep our version control process simple
 1. Use command line interface for all processes
