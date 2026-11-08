@@ -46,6 +46,22 @@ Customer 2 (arrives on turn 4) is a VIP and customer 4 (arrives on turn 10) is a
 
 **Critic rule:** the Critic always orders the most expensive base item on the menu. If two items cost the same, the one listed first on the menu wins.
 
+## Stage 3 Features
+
+**Happy Hour**
+* At the start of each turn, until it has been used, the game asks `HappyHour is available. Activate?` (`1` Yes, `2` No). It can be used once per game.
+* It lasts the turn it is switched on and the next turn.
+* Orders taken while it is on cost 80% of their price. The VIP discount comes first, then Happy Hour: a VIP Burger costs $15.00 → $13.50 → $10.80. The price is locked when the order is taken, so it doesn't change when Happy Hour ends.
+* Customers still waiting (in the queue, seated, or waiting for food) recover 15 satisfaction on each active turn, up to 100.
+
+**Combo meal**
+* The menu adds a Salad + Pasta combo: 90% of the two prices, ($9.00 + $18.00) × 0.9 = $24.30, and 3 preparation units (1 + 2).
+* With the combo, the menu has four items (Salad, Burger, Pasta, Salad + Pasta), so customer `id` orders item `(id - 1) % 4`. The Critic still orders Pasta. Customer 4 would order the combo, but customer 4 is the Critic, so with the current arrivals nobody orders it.
+
+**Host**
+* A fourth staff member the manager doesn't control. During Arrivals, the Host seats the first customer in the queue at the first free table. If nobody is waiting or no table is free, it prints `Invalid: >>Seat Customer<< ...` and does nothing.
+* The Waiter can still seat a customer in the same turn.
+
 ## Test Notes
 If anything changes the prompts, the key lists need re-recording.
 
@@ -79,6 +95,26 @@ echo 1 2 2 1 3 2 1 2 2 1 3 2 1 2 2 1 4 1 3 2 1 2 2 1 1 1 3 2 2 1 3 2 1 2 2 1 | j
 echo 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
 ```
 
+### Stage 3
+Replayed at commit `e11ba76`. Each turn now starts with the Happy Hour prompt (`1` Yes, `2` No) until Happy Hour is used, and the Host seats arrivals before Manager Selection. Both change which keys come next, so the Stage 2 key lists don't work in Stage 3.
+
+| Result | Choices | Outcome |
+|---|---|---|
+| Victory | Host seats arrivals. Waiter picks Serve, else Take Order, else Seat, else Wait. Chef picks Prepare, else Wait. Happy Hour never used | 5 paid, $67.50, satisfaction 87.80 |
+| Victory with Happy Hour | Same choices, with Happy Hour switched on at turn 4, when the VIP arrives. The VIP's Burger is ordered that turn for $10.80 | 5 paid, $64.80, satisfaction 88.80 |
+| Defeat | Waiter and Chef both pick Wait every turn. Happy Hour never used | 0 paid, $0.00, 2 unhappy departures |
+
+Happy Hour costs $2.70 of revenue and raises average satisfaction by 1.00.
+
+```sh
+# Victory
+echo 2 2 1 2 3 2 2 4 2 2 2 1 2 3 2 2 4 2 2 2 1 2 4 1 2 3 2 2 2 1 2 4 1 2 3 2 2 2 1 2 3 2 2 4 2 2 2 1 2 3 2 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
+# Victory with Happy Hour on turn 4
+echo 2 2 1 2 3 2 2 4 2 1 2 1 3 2 4 2 2 1 4 1 3 2 2 1 4 1 3 2 2 1 3 2 4 2 2 1 3 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
+# Defeat (the Stage 1 keys, with 2 = "No Happy Hour" at the start of each turn)
+echo 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
+```
+
 ## Stage Comparisons
 
 ### Stage 1 → Stage 2
@@ -106,49 +142,43 @@ Compare: [`stage-1...stage-2`][cmp-1-2]. The new customer types are commits `cb1
 | `src/main/gameflow/RestaurantRushApp.java` | Starts the game with `STAGE_2` instead of `DEFAULTS` |
 | `README.md` | Customer types, the Critic rule, the Stage 2 test runs and this comparison |
 
-### Stage 3
-
-Replayed at commit `0cb8d42`. 
-
-Stage 3 introduces automatic customer seating through the Host role. 
-
-The Stage 2 replay is no longer valid in Stage 3 because the Host automatically seats customers before Manager Selection. 
-This changes the sequence of valid tasks and causes the Stage 2 recorded inputs to fall out of sync with the game state. A new Stage 3 replay must therefore be recorded.
-
-
-| Result | Choices | Outcome |
-|---|---|---|
-| Victory | Host auto-seats customers. Waiter picks Serve, else Take Order, else Seat, else Wait. Chef picks Prepare, else Wait. | 5 paid, $67.50, satisfaction 85.60 |
-| Defeat | Waiter and Chef both pick Wait every turn | 0 paid, $0.00, 2 unhappy departures |
-
-```sh
-# Victory
-echo  2 2 1 2 4 2 2 3 2 2 2 1 1 3 2 4 2 2 1 4 1 3 2 2 1 4 1 3 2 4 2 2 1 3 2 2 1 3 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
-# Defeat (same keys as Stage 1)
-echo 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 2 4 2 | java -cp bin main.gameflow.RestaurantRushApp
-```
-
-## Stage Comparisons
-
 ### Stage 2 → Stage 3
+Compare: [`stage-2...stage-3`][cmp-2-3]. Happy Hour and the combo are commits `1baeda7` to `49e3318` and `f0d1c82` to `8c91bf5`. The Policy step and the `STAGE_3` setting are `9338615` to `7674222`. The Host is `2adb364` to `7e6efdf` and `0cb8d42`.
+
+**New files**
+
+| File | What it adds |
+|---|---|
+| `src/main/restaurant/HappyHour.java` | Once-per-game pricing policy: 2 turns, 80% price, +15 recovery. Keeps its own countdown (`activate()`, then `tick()` at each turn start). Gets the recovery as an `IntConsumer` callback, so it doesn't depend on `Restaurant` |
+| `src/main/menu/ComboMeal.java` | Subclass of `MenuItem` made of two base items: 90% of their combined price and the sum of their preparation units. The Chef, Waiter, Cashier and `Order` handle it with no changes |
+| `src/main/gameflow/turns/PolicyStep.java` | New first step of each turn. Asks the manager whether to switch Happy Hour on, until it has been used |
+| `src/main/staff/Host.java` | Subclass of `Staff`. `findWaitingCustomer()` picks the first customer in the queue (FIFO) and `findAvailableTable()` the first free table |
+| `src/main/staff/task/HostTask.java` | Base class for the Host's tasks |
+| `src/main/staff/task/SeatAutoTask.java` | The Host's automatic seating. `isTaskValid()` needs a waiting customer and a free table; `execute()` seats through `Restaurant.seatCustomer`, like the Waiter |
 
 **Changed files**
 
 | File | Change and reason |
 |---|---|
-| `src/main/staff/Host.java` | Subclass of Staff. Added `findWaitingCustomer()` and `findAvailableTable()`. The Host selects the first waiting customer (FIFO) and the first available table for automatic seating |
-| `src/main/staff/task/SeatAutoTask.java` | Implemented automatic seating behaviour. Added execute() to seat customers automatically and `isTaskValid()` to validate customer and table availability before seating. |
+| `src/main/restaurant/Restaurant.java` | Owns the `HappyHour`. `placeOrder` applies the customer's discount, then Happy Hour, then locks the price. `start()` calls `happyHour.tick()`. New `applyRecovery(amount)` for customers still waiting. `applyEndOfTurnWaiting()` removed, because `end()` already runs each customer's `endTurn()` |
+| `src/main/menu/Menu.java` | Keeps combos apart from base items (`getCombos()`, `getAllItems()`). Rejects duplicate names and combos whose parts aren't base items |
+| `src/main/restaurant/RestaurantView.java` | Prints `Happy hour active. Turns remaining N` and `Happy hour has ended` |
+| `src/main/events/OnRestaurant.java` | New `PolicyUpdated` event, sent when Happy Hour switches on, counts down or ends |
+| `src/main/gamesetting/GameDataType.java` | New `STAGE_3` setting: the Policy step first, a Host on the staff, and the Salad + Pasta combo on the menu. Same arrivals as Stage 2 |
+| `src/main/gameflow/turns/ArrivalStep.java` | After the arrival, runs the Host's first valid task, so the Host seats before Manager Selection |
+| `src/main/gameflow/turns/TurnStep.java`, `src/main/gameflow/turns/ManagerStep.java` | One shared input reader for every step (moved out of `ManagerStep`), so piped key lists work with two steps that ask for input |
+| `src/main/staff/task/TaskType.java` | The Host's task list: Seat Customer, Wait |
+| `src/main/gameflow/turns/TurnStartView.java` | Adds an empty `displayPolicy()` hook (no output yet) |
+| `src/main/restaurant/WaitingQueue.java` | Comment only |
+| `src/main/gameflow/RestaurantRushApp.java` | Starts the game with `STAGE_3` instead of `STAGE_2` |
+| `README.md` | Stage 3 features, the Stage 3 test runs and this comparison |
 
-
-Verification, observed during gameplay:
+Host seating, as seen during gameplay:
 
 ```
 Queue: [Customer 1]
-
 Executing SeatAutoTask: Seat Customer done by >> Host [ID:0] <<
 ```
-
-This confirms that the Host automatically seats customers before Manager Selection.
 
 
 # GitHub Version Control
@@ -189,5 +219,6 @@ origin  https://github.com/smleong-ntu/ct2003-t2.git (push)
 [ghconfig]: https://youtu.be/r8jQ9hVA2qs?si=aVXLdkI_udhQNqrS&t=186
 [profile]: https://github.com/smleong-ntu
 [cmp-1-2]: https://github.com/smleong-ntu/ct2003-t2/compare/stage-1...stage-2
+[cmp-2-3]: https://github.com/smleong-ntu/ct2003-t2/compare/stage-2...stage-3
 [jdk]: https://www.oracle.com/asean/java/technologies/downloads/#jdk25-windows
 [jdk-setup]: https://www.youtube.com/watch?v=jvhL10Fvj4s
